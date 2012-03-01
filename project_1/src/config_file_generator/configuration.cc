@@ -15,7 +15,7 @@ name_port = new map<int, struct tuxname_port>;
 if(!in){cout<<"cannot open file "<<filename<<endl;}
 
 string line;
-int i;
+int i = 0;
 struct tuxname_port tuxnode;
 struct gps gps_coord;
 vector<int> linkednodes;
@@ -31,8 +31,10 @@ while(getline(in,line))
  tuxnode.port = atoi((*iit).c_str());
  name_port->insert(pair<int, struct tuxname_port>(i+1, tuxnode));
  iit++;//omit the word "links"
+ iit++;
+ linkednodes.clear();//make sure the vector is empty at first;
  while(iit!=eos){
-  linkednodes.clear();//make sure the vector is empty at first;
+  
   linkednodes.push_back(atoi((*iit).c_str()));
   iit++;
 }
@@ -42,9 +44,10 @@ while(getline(in,line))
  iit++;
  gps_coord.gps_y = atoi((*iit).c_str());
  gps_coord.gps_z = 0; 
- gps_coordinate->insert(pair<int, struct gps>(i+1,gps_coord));
+ gps_coordinate->insert(pair<int, struct gps>(i-14,gps_coord));
 
 }
+i++;
 }
 
 in.close();
