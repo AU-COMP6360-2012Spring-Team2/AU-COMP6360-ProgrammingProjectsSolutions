@@ -1,0 +1,30 @@
+Node1 tux175 10120 links 2 
+Node2 tux175 10121 links 1 
+Node3 tux176 10120 links 
+Node4 tux176 10121 links 6 
+Node5 tux176 10122 links 10 
+Node6 tux177 10120 links 4 
+Node7 tux177 10121 links 
+Node8 tux178 10122 links 14 
+Node9 tux178 10123 links 10 11 15 
+Node10 tux179 10120 links 5 9 
+Node11 tux179 10121 links 9 12 
+Node12 tux179 10122 links 11 
+Node13 tux180 10120 links 14 
+Node14 tux180 10121 links 8 13 
+Node15 tux180 10122 links 9 
+Node1 215 360
+Node2 260 360
+Node3 360 376
+Node4 103 240
+Node5 220 240
+Node6 120 278
+Node7 0 124
+Node8 129 120
+Node9 274 120
+Node10 240 177
+Node11 360 138
+Node12 360 235
+Node13 82 0
+Node14 120 36
+Node15 240 49
