@@ -1,3 +1,6 @@
+#ifndef CLASS_message
+#define CLASS_message
+
 #include <ctime>
 
 #include "vehicle.h"
@@ -20,9 +23,9 @@ class message {
         unsigned int _sender_id;
 
         // 12 bytes GPS coordinates
-        unsigned int _gps_coordinate_x;
-        unsigned int _gps_coordinate_y;
-        unsigned int _gps_coordinate_z;
+        float _gps_coordinate_x;
+        float _gps_coordinate_y;
+        float _gps_coordinate_z;
 
         // 8 bytes Timestamp
         time_t _timestamp;
@@ -52,8 +55,8 @@ class message {
         static const unsigned char TYPE_EEBL = 1;
 
         // builders
-        static message * create_beacon(const unsigned int & gps_coordinate_x, const unsigned int & gps_coordinate_y, const unsigned int & gps_coordinate_z, const unsigned short & speed, const short & acceleration, const vehicle & vehicle);
-        static message * create_EEBL(const unsigned int & gps_coordinate_x, const unsigned int & gps_coordinate_y, const unsigned int & gps_coordinate_z, const unsigned short & speed, const short & deceleration, const vehicle * vehicle);
+        static message * create_beacon(const float & gps_coordinate_x, const float & gps_coordinate_y, const float & gps_coordinate_z, const unsigned short & speed, const short & acceleration, const vehicle & vehicle);
+        static message * create_EEBL(const float & gps_coordinate_x, const float & gps_coordinate_y, const float & gps_coordinate_z, const unsigned short & speed, const short & deceleration, const vehicle * vehicle);
         static message * create_rebroadcasted_EEBL(const message * original_EEBL, const vehicle * rebroadcasting_vehicle);
 
         // constructing from serialized data received from network
@@ -71,9 +74,9 @@ class message {
         unsigned int originator_id() const;       // 4 bytes originator id
         unsigned char ttl() const;                // 1 byte TTL
         unsigned int sender_id() const;           // 4 bytes sender id;
-        unsigned int gps_coordinate_x() const;    // 12 bytes GPS coordinates - x
-        unsigned int gps_coordinate_y() const;    // 12 bytes GPS coordinates - y
-        unsigned int gps_coordinate_z() const;    // 12 bytes GPS coordinates - z
+        float gps_coordinate_x() const;    // 12 bytes GPS coordinates - x
+        float gps_coordinate_y() const;    // 12 bytes GPS coordinates - y
+        float gps_coordinate_z() const;    // 12 bytes GPS coordinates - z
         time_t timestamp() const;                 // 8 bytes Timestamp
         unsigned short speed() const;             // 2 bytes Vehicle speed
         short acceleration() const;               // 2 bytes Vehicle acceleration
@@ -85,3 +88,5 @@ class message {
         vehicle get_originator() const;         // get vehicle object representing originator
         
 };
+
+#endif

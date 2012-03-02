@@ -1,3 +1,6 @@
+#ifndef CLASS_vehicle
+#define CLASS_vehicle
+
 class vehicle {
     private:
         // 4 bytes vehicle id
@@ -22,3 +25,5 @@ class vehicle {
         unsigned short size_width() const;   // 6 bytes Vehicle size - width
         unsigned short size_height() const;  // 6 bytes Vehicle size - height
 };
+
+#endif

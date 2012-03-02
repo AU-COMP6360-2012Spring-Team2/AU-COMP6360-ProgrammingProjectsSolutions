@@ -1,10 +1,13 @@
+#ifndef CLASS_message
+#define CLASS_message
+
 #include <cstring>
 #include <iostream>
 #include "message.h"
 
 using namespace std;
 
-message * message::create_beacon(const unsigned int & gps_coordinate_x, const unsigned int & gps_coordinate_y, const unsigned int & gps_coordinate_z, const unsigned short & speed, const short & acceleration, const vehicle & vehicle) {
+message * message::create_beacon(const float & gps_coordinate_x, const float & gps_coordinate_y, const float & gps_coordinate_z, const unsigned short & speed, const short & acceleration, const vehicle & vehicle) {
     message * m = new message;
 
     m->_type = message::TYPE_BEACON;
@@ -26,7 +29,7 @@ message * message::create_beacon(const unsigned int & gps_coordinate_x, const un
     return m;
 }
 
-message * message::create_EEBL(const unsigned int & gps_coordinate_x, const unsigned int & gps_coordinate_y, const unsigned int & gps_coordinate_z, const unsigned short & speed, const short & deceleration, const vehicle * vehicle) {
+message * message::create_EEBL(const float & gps_coordinate_x, const float & gps_coordinate_y, const float & gps_coordinate_z, const unsigned short & speed, const short & deceleration, const vehicle * vehicle) {
     message * m = new message;
 
     m->_type = message::TYPE_EEBL;
@@ -56,9 +59,9 @@ message * message::create_rebroadcasted_EEBL(const message * original_EEBL, cons
     m->_originator_id = original_EEBL->originator_id();
     m->_ttl = original_EEBL->ttl() - 1;
     m->_sender_id = rebroadcasting_vehicle->id();
-    m->_gps_coordinate_x = original_EEBL->gps_coordinate_x();
-    m->_gps_coordinate_y = original_EEBL->gps_coordinate_y();
-    m->_gps_coordinate_z = original_EEBL->gps_coordinate_z();
+    m->_gps_coordinate_x = original_EEBL->_gps_coordinate_x;
+    m->_gps_coordinate_y = original_EEBL->_gps_coordinate_y;
+    m->_gps_coordinate_z = original_EEBL->_gps_coordinate_z;
     m->_timestamp = time(NULL);
     m->_speed = original_EEBL->speed();
     m->_acceleration = original_EEBL->acceleration();
@@ -133,9 +136,9 @@ unsigned int message::packet_id() const { return this->_packet_id; }
 unsigned int message::originator_id() const { return this->_originator_id; }
 unsigned char message::ttl() const { return this->_ttl; }
 unsigned int message::sender_id() const { return this->_sender_id; }
-unsigned int message::gps_coordinate_x() const { return this->_gps_coordinate_x; }
-unsigned int message::gps_coordinate_y() const { return this->_gps_coordinate_y; }
-unsigned int message::gps_coordinate_z() const { return this->_gps_coordinate_z; }
+float message::gps_coordinate_x() const { return this->_gps_coordinate_x; }
+float message::gps_coordinate_y() const { return this->_gps_coordinate_y; }
+float message::gps_coordinate_z() const { return this->_gps_coordinate_z; }
 time_t message::timestamp() const { return this->_timestamp; }
 unsigned short message::speed() const { return this->_speed; }
 short message::acceleration() const { return this->_acceleration; }
@@ -150,4 +153,4 @@ vehicle message::get_originator() const {
     return r;
 }
 
-
+#endif
