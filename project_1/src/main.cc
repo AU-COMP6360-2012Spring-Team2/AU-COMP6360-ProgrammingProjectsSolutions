@@ -19,6 +19,7 @@ using namespace std;
 
 extern void *recver_main (void *context);
 extern void *sender_main (void *context);
+extern void *updater_main (void *context);
 
 int main(int argc, char* argv[])
 {
@@ -26,6 +27,7 @@ int main(int argc, char* argv[])
     pthread_mutex_t  lock;
     pg_thread_t      recver;
     pg_thread_t      sender;
+    pg_thread_t      updater;
 
 
     /* Initialize receiver thread */
@@ -49,10 +51,22 @@ int main(int argc, char* argv[])
                     &sender.attr,
                     sender_main, NULL);
 
+    /* Initialize update thread */
+    memset(&updater, 0, sizeof(pg_thread_t));
+    updater.stop = 0;
+    updater.context = NULL;                                              
+    pthread_attr_init(&updater.attr);
+    pthread_attr_setdetachstate(&updater.attr, PTHREAD_CREATE_JOINABLE);
+    pthread_create(&updater.thread,
+                    &updater.attr,
+                    updater_main, NULL);
+
+
 
 
     pthread_join(recver.thread, NULL);
     pthread_join(sender.thread, NULL);
+    pthread_join(updater.thread, NULL);
 
     return 0;
 }

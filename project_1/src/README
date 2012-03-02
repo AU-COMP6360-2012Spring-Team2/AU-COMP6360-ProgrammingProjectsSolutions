@@ -1,0 +1,9 @@
+1. "pg.h" contains all the needed data structures.
+2. "util.cc" contains all the functions definations.
+
+
+01-Mar-2012
+1. the third thread (update cars' status)
+2. Makefile
+3. launch.sh script
+4. conf format 

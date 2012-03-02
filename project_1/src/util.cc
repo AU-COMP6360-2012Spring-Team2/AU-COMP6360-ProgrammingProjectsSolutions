@@ -22,10 +22,14 @@ void *recver_main (void *context)
 
 }
 
-extern void *sender_main (void *context)
+void *sender_main (void *context)
 {
 
 
 }
 
+void *updater_main (void *context)
+{
 
+
+}
