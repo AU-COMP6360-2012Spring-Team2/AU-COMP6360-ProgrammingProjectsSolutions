@@ -24,7 +24,7 @@ class configuration{
         map<int, struct tuxname_port> *name_port;
 
     public:
-        configuration(string filename);
+        configuration(string * filename);
         map<int, vector<int> > * getlinks();
         map<int, struct gps> * get_gps_coordinate();
         map<int, struct tuxname_port> * get_name_port();
