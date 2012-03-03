@@ -1,6 +1,3 @@
-#ifndef CLASS_message
-#define CLASS_message
-
 #include <cstring>
 #include <iostream>
 #include "message.h"
@@ -152,5 +149,3 @@ vehicle message::get_originator() const {
     vehicle r(this->_originator_id, this->_heading, this->_size_length, this->_size_width, this->_size_height);
     return r;
 }
-
-#endif

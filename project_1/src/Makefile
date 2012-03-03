@@ -3,7 +3,7 @@ CFLAGS+=-Wall -I. -I../include -Iinclude
 LIBS += -lm -lpthread
 
 
-OBJ= configuration.o  message.o  S.o  util.o  vehicle.o 
+OBJ= cache.o configuration.o  message.o  S.o  util.o  vehicle.o 
 ALL_OBJ= util.o
 
 DEPS = configuration.h  message.h  pg.h  S.h  vehicle.h 
