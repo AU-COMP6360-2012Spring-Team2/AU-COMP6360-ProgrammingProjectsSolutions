@@ -31,11 +31,11 @@ S * S::get(){
     }
 }
 
-const configuration * get_config() const {
+const configuration * S::get_config() const {
     return this->_config;
 }
 
-std::queue<message * > get_eebl_sending_queue() const {
+std::queue<message * > S::get_eebl_sending_queue() const {
     return this->_eebl_sending_queue;
 }
 
