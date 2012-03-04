@@ -12,6 +12,10 @@ S::S() : _eng(time(NULL)), _negative_one_one_dist(-1, 1){
 }
 
 void S::initialize(std::string * config_file, unsigned int node_number){
+    if(instance){
+        std::cerr<<"error: S has already been initialized."<<endl;
+        throw ;
+    }
     instance = new S;
     // here initialize objects in S.
     instance->_config = new configuration(config_file);
@@ -25,6 +29,14 @@ S * S::get(){
         std::cerr<<"error: S not initialized. Call S::initialize(config_file) first.";
         throw ;
     }
+}
+
+const configuration * get_config() const {
+    return this->_config;
+}
+
+std::queue<message * > get_eebl_sending_queue() const {
+    return this->_eebl_sending_queue;
 }
 
 cache * S::get_cache() {

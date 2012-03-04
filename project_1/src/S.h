@@ -30,6 +30,9 @@ class S {
     public:
         static void initialize(std::string * config_file, unsigned int node_number);
         static S * get();
+        
+        const configuration * get_config() const;
+        std::queue<message * > get_eebl_sending_queue() const;
 
         cache * get_cache();
         const vehicle * me() const;
