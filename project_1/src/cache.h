@@ -4,6 +4,7 @@
 #include <unordered_map>
 #include <unordered_set>
 #include <map>
+#include <mutex>
 #include <ctime>
 
 #include "message.h"
@@ -26,6 +27,9 @@ class cache {
 
         void _remove_outdated_messages();
         void _remove_outdated_eebl();
+
+        mutex _mutex_message_cache;
+        mutex _mutex_eebl_cache;
 
     public:
         // TODO: probably should read from configuration file.
