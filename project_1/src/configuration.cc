@@ -43,9 +43,9 @@ configuration::configuration(string * filename){
             links->insert(pair<usint, vector<usint> >(i+1,linkednodes));
         }
         else{
-            gps_coord.gps_x = atoi((*iit).c_str());
+            gps_coord.gps_x = (float) atof((*iit).c_str());
             iit++;
-            gps_coord.gps_y = atoi((*iit).c_str());
+            gps_coord.gps_y = (float) atof((*iit).c_str());
             gps_coord.gps_z = 0; 
             gps_coordinate->insert(pair<usint, struct gps>(i-14,gps_coord));
         }

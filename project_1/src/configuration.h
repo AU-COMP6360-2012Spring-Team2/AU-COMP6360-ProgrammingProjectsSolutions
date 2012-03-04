@@ -8,7 +8,7 @@
 using namespace std;
 typedef unsigned int usint;
 struct gps {
-    usint gps_x, gps_y, gps_z;
+    float gps_x, gps_y, gps_z;
 };
 
 struct tuxname_port{
