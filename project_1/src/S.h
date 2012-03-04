@@ -3,13 +3,14 @@
 
 #include <string>
 #include <queue>
-#include <random>
 #include <mutex>
 
 #include "configuration.h"
 #include "message.h"
 #include "cache.h"
 #include "vehicle.h"
+
+
 
 class S {
     private:
@@ -24,13 +25,9 @@ class S {
         gps _gps;
         unsigned short _speed;
         short _acceleration;
-        std::mt19937 _eng;
-        std::uniform_real_distribution<float> _zero_one_dist;
-        std::uniform_real_distribution<float> _negative_one_one_dist;
-        std::uniform_int_distribution<unsigned int> _zero_inf_dist;
 
-        //std::mutex _mutex_eebl_sending_queue;
-        //std::mutex _mutex_gps;
+        std::mutex _mutex_eebl_sending_queue;
+        std::mutex _mutex_gps;
 
     public:
         static void initialize(std::string * config_file, unsigned int node_number);
@@ -40,12 +37,12 @@ class S {
 
         void eebl_enqueue(message * msg);
         message * eebl_dequeue();
-        const bool eebl_queue_empty() const;
+        const bool eebl_queue_empty() ;
 
         cache * get_cache();
         const vehicle * me() const;
 
-        const gps & get_gps() const;
+        const gps & get_gps() ;
         void set_gps(float x, float y, float z);
         const unsigned short get_speed() const;
         void set_speed(unsigned short speed);

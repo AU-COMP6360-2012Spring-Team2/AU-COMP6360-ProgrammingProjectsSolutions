@@ -2,13 +2,13 @@
 
 #include <iostream>
 #include <ctime>
-
+#include <cstdlib>
 
 S * S::instance = NULL;
 
-S::S() : _eng(time(NULL)), _negative_one_one_dist(-1, 1){
+S::S() {
     this->_cache = new cache;
-
+    srand(time(NULL));
 }
 
 void S::initialize(std::string * config_file, unsigned int node_number){
@@ -35,8 +35,25 @@ const configuration * S::get_config() const {
     return this->_config;
 }
 
-std::queue<message * > S::get_eebl_sending_queue() const {
-    return this->_eebl_sending_queue;
+void S::eebl_enqueue(message * msg) {
+    std::lock_guard<std::mutex> lk(this->_mutex_eebl_sending_queue);
+    this->_eebl_sending_queue.push(msg);
+}
+
+message * S::eebl_dequeue() {
+    std::lock_guard<std::mutex> lk(this->_mutex_eebl_sending_queue);
+    if (this->_eebl_sending_queue.empty())
+        return NULL;
+    else {
+        auto r = this->_eebl_sending_queue.front();
+        this->_eebl_sending_queue.pop();
+        return r;
+    }
+}
+
+const bool S::eebl_queue_empty() {
+    std::lock_guard<std::mutex> lk(this->_mutex_eebl_sending_queue);
+    return this->_eebl_sending_queue.empty();
 }
 
 cache * S::get_cache() {
@@ -55,29 +72,45 @@ void S::set_speed(unsigned short speed) {
     this->_speed = speed;
 }
 
-const gps & S::get_gps() const {
+const gps & S::get_gps() {
+    std::lock_guard<std::mutex> lk(this->_mutex_gps);
     return this->_gps;
 }
 
 void S::set_gps(float x, float y, float z) {
+    std::lock_guard<std::mutex> lk(this->_mutex_gps);
     this->_gps.gps_x = x;
     this->_gps.gps_y = y;
     this->_gps.gps_z = z;
 }
+const short S::get_acceleration() const {
+    return this->_acceleration;
+}
+
+const short S::get_deceleration() const {
+    return - this->_acceleration;
+}
+
+void S::set_acceleration(short acceleration) {
+    this->_acceleration = acceleration;
+}
+
+void S::set_deceleration(short deceleration) {
+    this->_acceleration = - deceleration;
+}
 
 float S::random_float_0_1() {
-    return this->_zero_one_dist(this->_eng);
+    return rand() * 1.0f / RAND_MAX;
 }
 
 float S::random_float_negative_to_positive_1() {
-    return this->_negative_one_one_dist(this->_eng);
+    return (rand() * 1.0f / RAND_MAX) * 2 - 1;
 }
 
 unsigned int S::random_int_0_inf() {
-    return this->_zero_inf_dist(this->_eng);
+    return rand();
 }
 
 int S::random_int(int lower_bound, int upper_bound) {
-    std::uniform_int_distribution<int> d(lower_bound, upper_bound);
-    return d(this->_eng);
+    return rand() % (upper_bound - lower_bound) + lower_bound;
 }
