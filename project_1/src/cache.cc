@@ -4,6 +4,9 @@ cache::cache(){
 }
 
 void cache::new_message(message * msg){
+    lock_guard<mutex> lk_msg(this->_mutex_message_cache);
+    lock_guard<mutex> lk_eebl(this->_mutex_eebl_cache);
+
     // update message cache
     this->_message_cache[msg->originator_id()] = msg;
     this->_message_cache_index.insert(pair<time_t, message * >(time(NULL), msg));
@@ -20,6 +23,8 @@ void cache::new_message(message * msg){
 }
 
 void cache::_remove_outdated_messages() {
+    lock_guard<mutex> lk(this->_mutex_message_cache);
+
     time_t now = time(NULL);
     auto i = this->_message_cache_index.begin();
     for( ; cache::CACHED_MESSAGE_LIVE_TIME < now - i->first; ++i) {
@@ -31,6 +36,8 @@ void cache::_remove_outdated_messages() {
 }
 
 void cache::_remove_outdated_eebl() {
+    lock_guard<mutex> lk(this->_mutex_message_cache);
+
     time_t now = time(NULL);
     auto i = this->_eebl_cache_index.begin();
     for( ; cache::CACHED_EEBL_ID_LIVE_TIME < now - i->first; ++i)
@@ -39,6 +46,8 @@ void cache::_remove_outdated_eebl() {
 }
 
 message * cache::get_latest_message_from(unsigned int vehicle_id){
+    lock_guard<mutex> lk(this->_mutex_message_cache);
+
     // remove outdated messages if necessary
     this->_remove_outdated_messages();
 
@@ -51,6 +60,8 @@ message * cache::get_latest_message_from(unsigned int vehicle_id){
 }
 
 bool cache::has_recently_seen_eebl_of(unsigned int vehicle_id, unsigned int packet_id) {
+    lock_guard<mutex> lk(this->_mutex_eebl_cache);
+
     // remove outdated eebl if necessary
     this->_remove_outdated_eebl();
 
