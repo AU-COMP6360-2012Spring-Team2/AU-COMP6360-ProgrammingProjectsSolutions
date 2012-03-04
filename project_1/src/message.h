@@ -55,9 +55,9 @@ class message {
         static const unsigned char TYPE_EEBL = 1;
 
         // builders
-        static message * create_beacon(const float & gps_coordinate_x, const float & gps_coordinate_y, const float & gps_coordinate_z, const unsigned short & speed, const short & acceleration, const vehicle & vehicle);
-        static message * create_EEBL(const float & gps_coordinate_x, const float & gps_coordinate_y, const float & gps_coordinate_z, const unsigned short & speed, const short & deceleration, const vehicle * vehicle);
-        static message * create_rebroadcasted_EEBL(const message * original_EEBL, const vehicle * rebroadcasting_vehicle);
+        static message * create_beacon(const float & gps_coordinate_x, const float & gps_coordinate_y, const float & gps_coordinate_z, const unsigned short & speed, const short & acceleration);
+        static message * create_EEBL(const float & gps_coordinate_x, const float & gps_coordinate_y, const float & gps_coordinate_z, const unsigned short & speed, const short & deceleration);
+        static message * create_rebroadcasted_EEBL(const message * original_EEBL);
 
         // constructing from serialized data received from network
         static message * from_bytes(const unsigned char data[]);

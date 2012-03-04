@@ -1,61 +1,62 @@
 #include <cstring>
 #include <iostream>
 #include "message.h"
+#include "S.h"
 
 using namespace std;
 
-message * message::create_beacon(const float & gps_coordinate_x, const float & gps_coordinate_y, const float & gps_coordinate_z, const unsigned short & speed, const short & acceleration, const vehicle & vehicle) {
+message * message::create_beacon(const float & gps_coordinate_x, const float & gps_coordinate_y, const float & gps_coordinate_z, const unsigned short & speed, const short & acceleration ) {
     message * m = new message;
 
     m->_type = message::TYPE_BEACON;
     m->_packet_id = 0; // !! TODO: increamental packet_id. range of each vehicle should be specified in configuration file. probably use singleton as an id generator.
-    m->_originator_id = vehicle.id();
+    m->_originator_id = S::get()->me()->id();
     m->_ttl = 0;
-    m->_sender_id = vehicle.id();
+    m->_sender_id = S::get()->me()->id();
     m->_gps_coordinate_x = gps_coordinate_x;
     m->_gps_coordinate_y = gps_coordinate_y;
     m->_gps_coordinate_z = gps_coordinate_z;
     m->_timestamp = time(NULL);
     m->_speed = speed;
     m->_acceleration = acceleration;
-    m->_heading = vehicle.heading();
-    m->_size_length = vehicle.size_length();
-    m->_size_width = vehicle.size_width();
-    m->_size_height = vehicle.size_height();
+    m->_heading = S::get()->me()->heading();
+    m->_size_length = S::get()->me()->size_length();
+    m->_size_width = S::get()->me()->size_width();
+    m->_size_height = S::get()->me()->size_height();
 
     return m;
 }
 
-message * message::create_EEBL(const float & gps_coordinate_x, const float & gps_coordinate_y, const float & gps_coordinate_z, const unsigned short & speed, const short & deceleration, const vehicle * vehicle) {
+message * message::create_EEBL(const float & gps_coordinate_x, const float & gps_coordinate_y, const float & gps_coordinate_z, const unsigned short & speed, const short & deceleration ) {
     message * m = new message;
 
     m->_type = message::TYPE_EEBL;
     m->_packet_id = 0; // !! TODO: increamental packet_id. range of each vehicle should be specified in configuration file. probably use singleton as an id generator.
-    m->_originator_id = vehicle->id();
+    m->_originator_id = S::get()->me()->id();
     m->_ttl = message::EEBL_TTL;
-    m->_sender_id = vehicle->id();
+    m->_sender_id = S::get()->me()->id();
     m->_gps_coordinate_x = gps_coordinate_x;
     m->_gps_coordinate_y = gps_coordinate_y;
     m->_gps_coordinate_z = gps_coordinate_z;
     m->_timestamp = time(NULL);
     m->_speed = speed;
     m->_acceleration = -deceleration;
-    m->_heading = vehicle->heading();
-    m->_size_length = vehicle->size_length();
-    m->_size_width = vehicle->size_width();
-    m->_size_height = vehicle->size_height();
+    m->_heading = S::get()->me()->heading();
+    m->_size_length = S::get()->me()->size_length();
+    m->_size_width = S::get()->me()->size_width();
+    m->_size_height = S::get()->me()->size_height();
 
     return m;
 }
 
-message * message::create_rebroadcasted_EEBL(const message * original_EEBL, const vehicle * rebroadcasting_vehicle) {
+message * message::create_rebroadcasted_EEBL(const message * original_EEBL ) {
     message * m = new message;
 
     m->_type = message::TYPE_EEBL;
     m->_packet_id = 0; // !! TODO: increamental packet_id. range of each vehicle should be specified in configuration file. probably use singleton as an id generator.
     m->_originator_id = original_EEBL->originator_id();
     m->_ttl = original_EEBL->ttl() - 1;
-    m->_sender_id = rebroadcasting_vehicle->id();
+    m->_sender_id = S::get()->me()->id();
     m->_gps_coordinate_x = original_EEBL->_gps_coordinate_x;
     m->_gps_coordinate_y = original_EEBL->_gps_coordinate_y;
     m->_gps_coordinate_z = original_EEBL->_gps_coordinate_z;
