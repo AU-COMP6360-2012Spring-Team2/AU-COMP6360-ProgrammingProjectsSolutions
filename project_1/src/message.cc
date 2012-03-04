@@ -5,11 +5,20 @@
 
 using namespace std;
 
+unsigned int message::_packet_id_counter = std::numeric_limits<unsigned int>::max();
+
+unsigned int message::_get_next_packet_id(){
+    if(_packet_id_counter == std::numeric_limits<unsigned int>::max())
+        return (message::_packet_id_counter = 0);
+    else
+        return ++message::_packet_id_counter;
+}
+
 message * message::create_beacon(const float & gps_coordinate_x, const float & gps_coordinate_y, const float & gps_coordinate_z, const unsigned short & speed, const short & acceleration ) {
     message * m = new message;
 
     m->_type = message::TYPE_BEACON;
-    m->_packet_id = 0; // !! TODO: increamental packet_id. range of each vehicle should be specified in configuration file. probably use singleton as an id generator.
+    m->_packet_id = message::_get_next_packet_id();
     m->_originator_id = S::get()->me()->id();
     m->_ttl = 0;
     m->_sender_id = S::get()->me()->id();
@@ -31,7 +40,7 @@ message * message::create_EEBL(const float & gps_coordinate_x, const float & gps
     message * m = new message;
 
     m->_type = message::TYPE_EEBL;
-    m->_packet_id = 0; // !! TODO: increamental packet_id. range of each vehicle should be specified in configuration file. probably use singleton as an id generator.
+    m->_packet_id = message::_get_next_packet_id();
     m->_originator_id = S::get()->me()->id();
     m->_ttl = message::EEBL_TTL;
     m->_sender_id = S::get()->me()->id();
@@ -53,7 +62,7 @@ message * message::create_rebroadcasted_EEBL(const message * original_EEBL ) {
     message * m = new message;
 
     m->_type = message::TYPE_EEBL;
-    m->_packet_id = 0; // !! TODO: increamental packet_id. range of each vehicle should be specified in configuration file. probably use singleton as an id generator.
+    m->_packet_id = original_EEBL->_packet_id;
     m->_originator_id = original_EEBL->originator_id();
     m->_ttl = original_EEBL->ttl() - 1;
     m->_sender_id = S::get()->me()->id();

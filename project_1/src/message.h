@@ -7,6 +7,10 @@
 
 class message {
     private:
+
+        static unsigned int _packet_id_counter;
+        static unsigned int _get_next_packet_id();
+
         // 1 byte Type
         unsigned char _type;
 

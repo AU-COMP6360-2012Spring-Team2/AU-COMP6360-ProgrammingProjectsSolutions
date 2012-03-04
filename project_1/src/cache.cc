@@ -8,10 +8,11 @@ void cache::new_message(message * msg){
     this->_message_cache[msg->originator_id()] = msg;
     this->_message_cache_index.insert(pair<time_t, message * >(time(NULL), msg));
 
-    // update eebl cache
-    this->_eebl_cache_index.insert(pair<time_t, _type_eebl_hash_set::iterator>( time(NULL),
-          this->_eebl_cache.insert(_type_vehicle_id_packet_id_pair(msg->originator_id(), msg->packet_id())).first
-        ));
+    // update eebl cache if necessary
+    if(message::TYPE_EEBL == msg->type())
+        this->_eebl_cache_index.insert(pair<time_t, _type_eebl_hash_set::iterator>( time(NULL),
+              this->_eebl_cache.insert(_type_vehicle_id_packet_id_pair(msg->originator_id(), msg->packet_id())).first
+            ));
 
     // remove outdated items.
     this->_remove_outdated_messages();
