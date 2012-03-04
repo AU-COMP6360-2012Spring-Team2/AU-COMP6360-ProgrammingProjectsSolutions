@@ -13,6 +13,7 @@
 #include <errno.h>
 #include <string>
 #include <sys/socket.h>
+#include <cstring>
 
 #include "pg.h"
 using namespace std;
