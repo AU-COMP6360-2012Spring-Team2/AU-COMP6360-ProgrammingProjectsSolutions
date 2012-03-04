@@ -6,28 +6,28 @@
 #include <string>
 #include <stdlib.h>
 using namespace std;
-
+typedef unsigned int usint;
 struct gps {
-    unsigned int gps_x, gps_y, gps_z;
+    usint gps_x, gps_y, gps_z;
 };
 
 struct tuxname_port{
     string tuxname;
-    int port;
+    unsigned short port;
 };
  
 class configuration{
 //fields
     private:
-        map<int, vector<int> > * links;
-        map<int, struct gps > *gps_coordinate; 
-        map<int, struct tuxname_port> *name_port;
+        map<usint, vector<usint> > * links;
+        map<usint, struct gps > *gps_coordinate; 
+        map<usint, struct tuxname_port> *name_port;
 
     public:
         configuration(string * filename);
-        map<int, vector<int> > * getlinks();
-        map<int, struct gps> * get_gps_coordinate();
-        map<int, struct tuxname_port> * get_name_port();
+        map<usint, vector<usint> > * getlinks();
+        map<usint, struct gps> * get_gps_coordinate();
+        map<usint, struct tuxname_port> * get_name_port();
         ~configuration();
 };
  
