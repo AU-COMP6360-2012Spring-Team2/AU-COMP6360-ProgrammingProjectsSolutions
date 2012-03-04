@@ -16,18 +16,19 @@ class cache {
         typedef unordered_set<_type_vehicle_id_packet_id_pair> _type_eebl_hash_set;
         typedef unordered_map<unsigned int, message * > _type_message_hash_map;
 
+        // cache for messages and eebl ids. using hash to ensure fast access
         _type_eebl_hash_set _eebl_cache;
         _type_message_hash_map _message_cache;
 
+        // two ordered multimap's with keys being timestamp, used as index for fast removing outdated items
         multimap<time_t, _type_eebl_hash_set::iterator> _eebl_cache_index;
         multimap<time_t, message * > _message_cache_index;
 
-        time_t _last_removing_outdated_messages_timestamp;
-        time_t _last_removing_outdated_eebl_timestamp;
         void _remove_outdated_messages();
         void _remove_outdated_eebl();
 
     public:
+        // TODO: probably should read from configuration file.
         static const unsigned int CACHED_MESSAGE_LIVE_TIME = 8;
         static const unsigned int CACHED_EEBL_ID_LIVE_TIME = 32;
 
