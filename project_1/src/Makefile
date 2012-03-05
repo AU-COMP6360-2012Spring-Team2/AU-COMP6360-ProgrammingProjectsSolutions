@@ -18,7 +18,7 @@ DEPS = configuration.h  message.h  pg.h  S.h  vehicle.h
 
 
 memory: $(OBJ) main.o
-	$(CXX) $(CFLAGS) -o main.x $(ALL_OBJ) main.o $(LIBS)
+	$(CXX) $(CFLAGS) -o main.x $(OBJ) main.o $(LIBS)
 
 clean:
 	rm -f main.x $(OBJ) main.o 
