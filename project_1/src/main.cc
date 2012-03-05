@@ -19,6 +19,7 @@
 #include "S.h"
 using namespace std;
 
+
 extern void *recver_main (void *context);
 extern void *sender_main (void *context);
 extern void *updater_main (void *context);
@@ -27,6 +28,7 @@ int main(int argc, char* argv[])
 {   string conf_file = argv[1];
     unsigned int nodeid = atoi(argv[2]);
     S::initialize(&conf_file, nodeid);
+    S::get()->log("S initialized");
     pthread_cond_t   cond;
     pthread_mutex_t  lock;
     pg_thread_t      recver;

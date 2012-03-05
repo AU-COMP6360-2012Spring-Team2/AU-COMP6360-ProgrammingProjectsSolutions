@@ -213,7 +213,7 @@ delete reb;
      }
 
 }
-sleep(100);//sleep 0.1s
+sleep(0.1);//sleep 0.1s
 }
 
 
@@ -232,7 +232,7 @@ void *updater_main (void *context)
         s_only->set_acceleration(2);
     }
         s_only->set_speed(s_only->get_speed()+s_only->get_acceleration());
-        sleep(1000); //sleep 1s
+        sleep(0.1); //sleep 1s
     }
 
 
