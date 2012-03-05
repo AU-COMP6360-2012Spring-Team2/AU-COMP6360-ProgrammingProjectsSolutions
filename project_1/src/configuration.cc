@@ -28,6 +28,7 @@ configuration::configuration(string * filename){
         istream_iterator<string> iit(iss);
         istream_iterator<string> eos;
         iit++; //omit the first word "Node"
+        iit++; //omit node id
         if(i<15){
             tuxnode.tuxname = *iit;
             iit++;
@@ -36,18 +37,17 @@ configuration::configuration(string * filename){
             iit++;//omit the word "links"
             iit++;
             linkednodes.clear();//make sure the vector is empty at first;
-            while(iit!=eos){
+            while((*iit).compare("gps")!=0){
                 linkednodes.push_back(atoi((*iit).c_str()));
                 iit++;
             }
+            iit++;//omit the word "gps"
             links->insert(pair<usint, vector<usint> >(i+1,linkednodes));
-        }
-        else{
             gps_coord.gps_x = (float) atof((*iit).c_str());
             iit++;
             gps_coord.gps_y = (float) atof((*iit).c_str());
             gps_coord.gps_z = 0; 
-            gps_coordinate->insert(pair<usint, struct gps>(i-14,gps_coord));
+            gps_coordinate->insert(pair<usint, struct gps>(i+1,gps_coord));
         }
         i++;
     }

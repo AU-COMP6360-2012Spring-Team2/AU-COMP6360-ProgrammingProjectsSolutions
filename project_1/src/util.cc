@@ -13,6 +13,7 @@
 #include <stdlib.h>
 #include <errno.h>
 #include <string>
+#include <sstream>
 
 #include <stdio.h>
 #include <sys/types.h>
@@ -98,7 +99,9 @@ if(recvmsg->type()==message::TYPE_EEBL){
         if(!cache->has_recently_seen_eebl_of(recvmsg->originator_id(), recvmsg->packet_id())){
         //here we add the new eebl to cache, don't explicitly delete
         //it in recver, cache will automatically delete it when expire
-        s_only->log("Received EEBL from vehicle "+ recvmsg->originator_id()+"packet Id: "+recvmsg->packet_id());
+        std::stringstream ss;
+        ss<<"Received EEBL from vehicle "<<recvmsg->originator_id()<<"packet Id: "<<recvmsg->packet_id();
+        s_only->log(ss.str());
         cache->new_message(recvmsg);
         usint senderid = recvmsg->sender_id();
 
@@ -181,7 +184,9 @@ else{
      if(!(s_only->eebl_queue_empty()))
      {
          message *reb = s_only->eebl_dequeue();
-         s_only->log("I am rebroadcasting an EEBL message with originator ID: " + reb->originator_id()+" packet ID: "+reb->packet_id());
+         std::stringstream ss;
+         ss<<"I am rebroadcasting an EEBL message with originator ID: " << reb->originator_id()<<" packet ID: "<<reb->packet_id();
+            s_only->log(ss.str());
 //Here we lost the original sender of the eebl message. need to be solved
 for(i=0; i<linkednodesid.size();i++)
     {
