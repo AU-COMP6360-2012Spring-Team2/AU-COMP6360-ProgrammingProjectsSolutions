@@ -1,6 +1,6 @@
-Node 1 tux188 10000 links 2
-Node 2 tux188 10001 links 1 2 3
-Node 3 tux189 10000 links 1 2 3
-Node 4 tux189 10001 links 1 2 3
-Node 5 tux190 10000 links 1 2 3
+Node 1 tux188 10000 links 2 gps 215 360
+Node 2 tux188 10001 links 1 3 gps 260 360
+Node 3 tux189 10000 links 1 2 gps 240 177
+Node 4 tux189 10001 links 1 2 3 gps 360 138
+Node 5 tux190 10000 links 1 2 3 gps 82 0
 
