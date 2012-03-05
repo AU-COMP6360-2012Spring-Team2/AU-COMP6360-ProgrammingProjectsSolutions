@@ -98,6 +98,7 @@ if(recvmsg->type()==message::TYPE_EEBL){
         if(!cache->has_recently_seen_eebl_of(recvmsg->originator_id(), recvmsg->packet_id())){
         //here we add the new eebl to cache, don't explicitly delete
         //it in recver, cache will automatically delete it when expire
+        s_only->log("Received EEBL from vehicle "+ recvmsg->originator_id()+"packet Id: "+recvmsg->packet_id());
         cache->new_message(recvmsg);
         usint senderid = recvmsg->sender_id();
 
@@ -108,6 +109,7 @@ if (prob_rebroadcast(mylocation, sender_gps)){
     message *rebroadcast = message::create_rebroadcasted_EEBL(recvmsg);
 
     s_only->eebl_enqueue(rebroadcast);
+    s_only->log("Decided to rebroadcast this EEBL msg!");
 }
 }
 else{
@@ -165,7 +167,8 @@ while(1){
 if((s_only->get_acceleration())<-1){//here speed, acceleration should get from the third thread
     //create eebl signal for the node itself
     message *eebl = message::create_EEBL(mylocation.gps_x, mylocation.gps_y,
-            mylocation.gps_z,s_only->get_speed(),s_only->get_acceleration());
+            mylocation.gps_z,s_only->get_speed(),s_only->get_acceleration());   
+    s_only->log("I am generating EEBL and sending out it!");
     eebl->to_bytes(tosend);
     for(i = 0; i<linkednodesid.size();i++){
     sendto(sd,tosend, message::MESSAGE_SIZE,0,(struct sockaddr *) &(idtosockaddr[linkednodesid[i]]),sizeof(struct sockaddr_in));
@@ -178,7 +181,7 @@ else{
      if(!(s_only->eebl_queue_empty()))
      {
          message *reb = s_only->eebl_dequeue();
-
+         s_only->log("I am rebroadcasting an EEBL message with originator ID: " + reb->originator_id()+" packet ID: "+reb->packet_id());
 //Here we lost the original sender of the eebl message. need to be solved
 for(i=0; i<linkednodesid.size();i++)
     {
