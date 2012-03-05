@@ -120,3 +120,7 @@ unsigned int S::random_int_0_inf() {
 int S::random_int(int lower_bound, int upper_bound) {
     return rand() % (upper_bound - lower_bound) + lower_bound;
 }
+
+void S::log(std::string content) {
+    std::cout<<"Timestamp: "<<time(NULL)<<" Node: "<<this->_me->id()<<" "<<content<<endl;
+}

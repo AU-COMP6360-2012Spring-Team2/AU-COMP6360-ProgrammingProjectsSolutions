@@ -58,6 +58,8 @@ class S {
         float random_float_negative_to_positive_1();
         unsigned int random_int_0_inf();
         int random_int(int lower_bound, int upper_bound);
+        
+        void log(std::string content);
 
        
 };
