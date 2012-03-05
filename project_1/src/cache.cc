@@ -40,7 +40,8 @@ void cache::_remove_outdated_messages() {
             this->_message_cache.erase(i->second->originator_id());
         delete i->second; // here is the exclusive place to destroy the message memory space
     }
-    this->_message_cache_index.erase(this->_message_cache_index.begin(), i);
+    if(this->_message_cache_index.size()>0)
+        this->_message_cache_index.erase(this->_message_cache_index.begin(), i);
 }
 
 void cache::_remove_outdated_eebl() {
@@ -50,7 +51,8 @@ void cache::_remove_outdated_eebl() {
     auto i = this->_eebl_cache_index.begin();
     for( ; cache::CACHED_EEBL_ID_LIVE_TIME < now - i->first && i != this->_eebl_cache_index.end(); ++i)
         this->_eebl_cache.erase(i->second);
-    this->_eebl_cache_index.erase(this->_eebl_cache_index.begin(), i);
+    if(this->_eebl_cache_index.size() > 0)
+        this->_eebl_cache_index.erase(this->_eebl_cache_index.begin(), i);
 }
 
 message * cache::get_latest_message_from(unsigned int vehicle_id){

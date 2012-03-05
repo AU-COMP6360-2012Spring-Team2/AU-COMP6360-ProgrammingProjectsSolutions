@@ -41,7 +41,7 @@ class cache {
     public:
         // TODO: probably should read from configuration file.
         static const unsigned int CACHED_MESSAGE_LIVE_TIME = 8;
-        static const unsigned int CACHED_EEBL_ID_LIVE_TIME = 32;
+        static const unsigned int CACHED_EEBL_ID_LIVE_TIME = 4;
 
         cache();
         void new_message(message * msg);
