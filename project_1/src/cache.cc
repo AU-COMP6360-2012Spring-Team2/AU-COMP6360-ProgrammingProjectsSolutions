@@ -7,6 +7,9 @@ void cache::new_message(message * msg){
     lock_guard<mutex> lk_msg(this->_mutex_message_cache);
     lock_guard<mutex> lk_eebl(this->_mutex_eebl_cache);
 
+    if(message::TYPE_EEBL == msg->type() && this->_eebl_cache.end() != this->_eebl_cache.find(_type_vehicle_id_packet_id_pair(msg->originator_id(), msg->packet_id())) )
+        return;
+
     // update message cache
     this->_message_cache[msg->originator_id()] = msg;
     this->_message_cache_index.insert(pair<time_t, message * >(time(NULL), msg));
