@@ -31,7 +31,7 @@ S * S::get(){
     }
 }
 
-const configuration * S::get_config() const {
+configuration * S::get_config() const {
     return this->_config;
 }
 
@@ -64,11 +64,13 @@ const vehicle * S::me() const{
     return this->_me;
 }
 
-const unsigned short S::get_speed() const {
+unsigned short S::get_speed(){
+    std::lock_guard<std::mutex> lk(this->_mutex_speed);
     return this->_speed;
 }
 
 void S::set_speed(unsigned short speed) {
+    std::lock_guard<std::mutex> lk(this->_mutex_speed);
     this->_speed = speed;
 }
 
@@ -83,19 +85,23 @@ void S::set_gps(float x, float y, float z) {
     this->_gps.gps_y = y;
     this->_gps.gps_z = z;
 }
-const short S::get_acceleration() const {
+short S::get_acceleration() {
+    std::lock_guard<std::mutex> lk(this->_mutex_acceleration);
     return this->_acceleration;
 }
 
-const short S::get_deceleration() const {
+short S::get_deceleration(){
+    std::lock_guard<std::mutex> lk(this->_mutex_acceleration);
     return - this->_acceleration;
 }
 
 void S::set_acceleration(short acceleration) {
+    std::lock_guard<std::mutex> lk(this->_mutex_acceleration);
     this->_acceleration = acceleration;
 }
 
 void S::set_deceleration(short deceleration) {
+    std::lock_guard<std::mutex> lk(this->_mutex_acceleration);
     this->_acceleration = - deceleration;
 }
 

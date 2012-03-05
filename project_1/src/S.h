@@ -28,6 +28,8 @@ class S {
 
         std::mutex _mutex_eebl_sending_queue;
         std::mutex _mutex_gps;
+        std::mutex _mutex_speed;
+        std::mutex _mutex_acceleration;
 
     public:
         static void initialize(std::string * config_file, unsigned int node_number);
@@ -44,10 +46,10 @@ class S {
 
         const gps & get_gps() ;
         void set_gps(float x, float y, float z);
-        const unsigned short get_speed() const;
+        unsigned short get_speed() ;
         void set_speed(unsigned short speed);
-        const short get_acceleration() const;
-        const short get_deceleration() const;
+        short get_acceleration() ;
+        short get_deceleration() ;
         void set_acceleration(short acceleration);
         void set_deceleration(short deceleration);
 
