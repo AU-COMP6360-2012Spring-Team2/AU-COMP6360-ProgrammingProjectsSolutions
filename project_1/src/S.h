@@ -42,7 +42,7 @@ class S {
         const bool eebl_queue_empty() ;
 
         cache * get_cache();
-        vehicle * me() const;
+        const vehicle * me() const;
 
         const gps & get_gps() ;
         void set_gps(float x, float y, float z);

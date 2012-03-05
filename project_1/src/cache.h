@@ -14,7 +14,14 @@ using namespace std;
 class cache {
     private:
         typedef std::pair<unsigned int, unsigned int> _type_vehicle_id_packet_id_pair;
-        typedef unordered_set<_type_vehicle_id_packet_id_pair> _type_eebl_hash_set;
+        class _hasher_type_vehicle_id_packet_id_pair {
+            public:
+                size_t operator()(const _type_vehicle_id_packet_id_pair & s ) const {
+                    std::hash<unsigned int> hasher;
+                    return hasher(s.first) + hasher(s.second);
+                }
+        };
+        typedef unordered_set<_type_vehicle_id_packet_id_pair, _hasher_type_vehicle_id_packet_id_pair> _type_eebl_hash_set;
         typedef unordered_map<unsigned int, message * > _type_message_hash_map;
 
         // cache for messages and eebl ids. using hash to ensure fast access

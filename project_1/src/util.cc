@@ -61,7 +61,7 @@ void *recver_main (void *context)
 {
  S* s_only = S::get();
     //get the node id
-     vehicle *me = s_only->me();
+     const vehicle *me = s_only->me();
     usint myid = me->id();
      configuration *p_conf = s_only->get_config();
     cache *cache = s_only->get_cache();
@@ -127,7 +127,7 @@ void *sender_main (void *context)
 {
 S* s_only = S::get();
 //get the node id
-vehicle *me = s_only->me();
+const vehicle *me = s_only->me();
 usint myid = me->id();
 
 //get p_links 
