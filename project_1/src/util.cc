@@ -97,7 +97,7 @@ void *recver_main (void *context)
 
         if(recvmsg->type()==message::TYPE_EEBL){
             std::stringstream ss;
-            ss<<"EEBL originated from "<<recvmsg->originator_id()<<"[sent by "<<recvmsg->sender_id()<<"] ("<<recvmsg->packet_id()<<")";
+            ss<<"EEBL originated from "<<recvmsg->originator_id()<<"[sent by "<<recvmsg->sender_id()<<"] ("<<recvmsg->packet_id()<<") TTL+"<<recvmsg->ttl();
             s_only->log(ss.str());
 
             //first check whether the eebl is in cache or not
