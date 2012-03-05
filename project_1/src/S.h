@@ -33,14 +33,14 @@ class S {
         static void initialize(std::string * config_file, unsigned int node_number);
         static S * get();
         
-        const configuration * get_config() const;
+         configuration * get_config() const;
 
         void eebl_enqueue(message * msg);
         message * eebl_dequeue();
         const bool eebl_queue_empty() ;
 
         cache * get_cache();
-        const vehicle * me() const;
+        vehicle * me() const;
 
         const gps & get_gps() ;
         void set_gps(float x, float y, float z);
