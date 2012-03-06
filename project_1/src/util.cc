@@ -109,7 +109,7 @@ void *recver_main (void *context)
 
                 struct gps sender_gps =(*gps_coord)[senderid];
                 //decide whether to rebroadcast
-                if (prob_rebroadcast(mylocation, sender_gps) && recvmsg->ttl() > 0){
+                if (recvmsg->ttl() > 0 && prob_rebroadcast(mylocation, sender_gps) ){
                     //create rebroadcast message
                     message *rebroadcast = message::create_rebroadcasted_EEBL(recvmsg);
                     s_only->eebl_enqueue(rebroadcast);
@@ -185,41 +185,38 @@ void *sender_main (void *context)
         }
 
         //else{
-            //check whether need to rebroadcast eebl
-            if(!(s_only->eebl_queue_empty()))
-                while(!(s_only->eebl_queue_empty()))
+        //check whether need to rebroadcast eebl
+        while(!(s_only->eebl_queue_empty()))
+        {
+            message *reb = s_only->eebl_dequeue();
+            std::stringstream ss;
+            ss<<"Rebroadcasting an EEBL message with originator ID: " << reb->originator_id()<<" packet ID: "<<reb->packet_id();
+            s_only->log(ss.str());
+            //Here we lost the original sender of the eebl message. need to be solved
+            reb->to_bytes(tosend);
+            for(i=0; i<linkednodesid.size();i++)
+            {
+                if(linkednodesid[i]!=reb->originator_id())
                 {
-                    message *reb = s_only->eebl_dequeue();
-                    std::stringstream ss;
-                    ss<<"Rebroadcasting an EEBL message with originator ID: " << reb->originator_id()<<" packet ID: "<<reb->packet_id();
-                    s_only->log(ss.str());
-                    //Here we lost the original sender of the eebl message. need to be solved
-                    reb->to_bytes(tosend);
-                    for(i=0; i<linkednodesid.size();i++)
-                    {
-                        if(linkednodesid[i]!=reb->originator_id())
-                        {
-                            sendto(sd,tosend, message::MESSAGE_SIZE,0,(struct sockaddr *) &(idtosockaddr[linkednodesid[i]]),sizeof(struct sockaddr_in));
-                        }
-                    }
-                    delete reb;
-
-
-                }
-            //here we are sending beacon
-            else{
-                message *beacon = message::create_beacon(mylocation.gps_x, mylocation.gps_y, mylocation.gps_z, s_only->get_speed(), s_only->get_acceleration());
-
-                beacon->to_bytes(tosend);
-                for(i = 0; i<linkednodesid.size();i++){
                     sendto(sd,tosend, message::MESSAGE_SIZE,0,(struct sockaddr *) &(idtosockaddr[linkednodesid[i]]),sizeof(struct sockaddr_in));
                 }
-                delete beacon;
-
-
             }
+            delete reb;
 
-        //}
+
+        }
+        
+        //here we are sending beacon
+        if((s_only->get_acceleration())>=-1){//here speed, acceleration should get from the third thread
+            message *beacon = message::create_beacon(mylocation.gps_x, mylocation.gps_y, mylocation.gps_z, s_only->get_speed(), s_only->get_acceleration());
+
+            beacon->to_bytes(tosend);
+            for(i = 0; i<linkednodesid.size();i++){
+                sendto(sd,tosend, message::MESSAGE_SIZE,0,(struct sockaddr *) &(idtosockaddr[linkednodesid[i]]),sizeof(struct sockaddr_in));
+            }
+            delete beacon;
+        }
+
         sleep(0.1);//sleep 0.1s
     }
 
