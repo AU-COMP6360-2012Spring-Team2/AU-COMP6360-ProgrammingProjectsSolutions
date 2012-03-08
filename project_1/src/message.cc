@@ -83,10 +83,10 @@ message * message::create_rebroadcasted_EEBL(const message * original_EEBL ) {
 message::message() { }
 
 message * message::from_bytes(const unsigned char data[]) {
-    if (sizeof(data) != message::MESSAGE_SIZE) {
-        cerr<<"error[message::from_bytes] Destination data[] size is not properly set. Please use message::MESSAGE_SIZE contant.";
+    /*if (sizeof(data) != message::MESSAGE_SIZE) {
+        cerr<<"error[message::from_bytes] Source data[] size is not properly set. Please use message::MESSAGE_SIZE contant.";
         throw;
-    }
+    }*/
 
     message * m = new message;
     int p = 0;
@@ -111,10 +111,12 @@ message * message::from_bytes(const unsigned char data[]) {
 }
 
 void message::to_bytes(unsigned char buffer[]) const {
-    if (sizeof(buffer) != message::MESSAGE_SIZE) {
-       cerr<<"error[message::to_bytes] Destination buffer[] size is not properly set. Please use message::MESSAGE_SIZE contant.";
+    /*if (sizeof(buffer) != message::MESSAGE_SIZE) {
+       cerr<<"error[message::to_bytes] "
+           <<"sizeof(buffer)["<<sizeof(buffer)<<"] != message::MESSAGE_SIZE["<<message::MESSAGE_SIZE<<"] "
+           <<"Destination buffer[] size is not properly set. Please use message::MESSAGE_SIZE contant.";
        throw;
-    }
+    }*/
 
     int p = 0;
     #define PUT(V,SIZE) { memcpy(buffer + p, &(V), SIZE); p += SIZE; }
