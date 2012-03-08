@@ -1,0 +1,15 @@
+Node 1 tux175 10120 links 2 gps 215 360
+Node 2 tux175 10121 links 1 gps 260 360 
+Node 3 tux176 10120 links gps 360 376
+Node 4 tux176 10121 links 6 gps 103 240 
+Node 5 tux176 10122 links 10 gps 220 240
+Node 6 tux177 10120 links 4 gps 120 278
+Node 7 tux177 10121 links gps 0 124
+Node 8 tux178 10122 links 14 gps 129 120
+Node 9 tux178 10123 links 10 11 15 gps 274 120
+Node 10 tux179 10120 links 5 9 gps 240 177
+Node 11 tux179 10121 links 9 12 gps 360 138
+Node 12 tux179 10122 links 11 gps 360 235
+Node 13 tux180 10120 links 14 gps 82 0
+Node 14 tux180 10121 links 8 13 gps 120 36
+Node 15 tux180 10122 links 9 gps 240 49
