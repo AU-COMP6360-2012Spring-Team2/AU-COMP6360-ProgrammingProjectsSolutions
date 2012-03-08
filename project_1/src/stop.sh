@@ -7,8 +7,8 @@ file=$2
 conf_file=$1/$2
 #echo "$dir/conf"
 echo "$conf_file"
-NODE=($(awk '{print $3}' $dir/conf))
-NUM=($(awk '{print $2}' $dir/conf))
+NODE=($(awk '{print $3}' $(conf_file)))
+NUM=($(awk '{print $2}' $(conf_file)))
 node_size=${#NODE[*]}
 node_size=$(expr $node_size - 1)
 
