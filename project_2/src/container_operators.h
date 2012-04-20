@@ -62,102 +62,29 @@
 #include <unordered_map>
 #include <map>
 
-#define SET_OPERATORS(TEMP, TYPE)\
-TEMP \
-void operator += ( TYPE & lo, const Key & ro ) {\
-    lo.insert(ro);\
-}\
-\
-TEMP \
-void operator += ( TYPE & lo, const TYPE & ro ) {\
-    for(auto i = ro.begin(); i != ro.end(); ++i)\
-        lo += *i;\
-}\
-\
-TEMP \
-void  operator -= ( TYPE & lo, const Key & ro ){\
-    lo.erase(ro);\
-}\
-\
-TEMP \
-void  operator -= ( TYPE & lo, const TYPE & ro ){\
-    for(auto i = ro.begin(); i != ro.end(); ++i)\
-        lo -= *i;\
-}\
-\
-TEMP \
-TYPE operator +  ( const TYPE & lo, const TYPE & ro ) {\
-    TYPE r;\
-    for(auto i = lo.begin(); i != lo.end(); ++i)\
-        r.insert(*i);\
-    for(auto i = ro.begin(); i != ro.end(); ++i)\
-        r.insert(*i);\
-    return r;\
-}\
-\
-TEMP \
-TYPE operator -  ( const TYPE & lo, const TYPE & ro ) {\
-    TYPE r;\
-    for(auto i = lo.begin(); i != lo.end(); ++i)\
-        if(ro.end() == ro.find(*i))\
-            r.insert(*i);\
-    return r;\
-}
 
+#define TEMP template<class Key, class Hash, class KeyEqual, class Allocator>
+#define TYPE std::unordered_set<Key, Hash, KeyEqual, Allocator>
+#include "set_operators.inl"
+#undef TEMP
+#undef TYPE
 
-#define MAP_OPERATORS(TEMP, TYPE) \
-TEMP \
-void operator += ( TYPE & lo, const TYPE & ro ) { \
-    for(auto i = ro.begin(); i != ro.end(); ++i) \
-        if(lo.end() != lo.find(i->first)) \
-            lo[i->first] += i->second; \
-        else \
-            lo[i->first] = i->second; \
-} \
- \
-TEMP \
-void  operator -= ( TYPE & lo, const TYPE & ro ){ \
-    for(auto i = ro.begin(); i != ro.end(); ++i) \
-        lo.erase(i->first); \
-} \
- \
-TEMP \
-TYPE operator +  ( const TYPE & lo, const TYPE & ro ) { \
-    TYPE r; \
-    for(auto i = lo.begin(); i != lo.end(); ++i) \
-        r[i->first] = i->second; \
-    for(auto i = ro.begin(); i != ro.end(); ++i) \
-        if(r.end() != r.find(i->first)) \
-            r[i->first] += i->second; \
-        else \
-            r[i->first] = i->second; \
-    return r; \
-} \
- \
-TEMP \
-TYPE operator -  ( const TYPE & lo, const TYPE & ro ) { \
-    TYPE r; \
-    for(auto i = lo.begin(); i != lo.end(); ++i) \
-        if(ro.end() == ro.find(i->first)) \
-            r[i->first] = i->second; \
-    return r; \
-}
+#define TEMP template<class Key, class Compare, class Allocator>
+#define TYPE std::set<Key, Compare, Allocator>
+#include "set_operators.inl"
+#undef TEMP
+#undef TYPE
 
+#define TEMP template < class Key, class T, class Hash, class KeyEqual, class Allocator >
+#define TYPE std::unordered_map< Key, T, Hash, KeyEqual, Allocator >
+#include "map_operators.inl"
+#undef TEMP
+#undef TYPE
 
-#define UNORDERED_SET_TEMP template<class Key, class Hash, class KeyEqual, class Allocator>
-#define UNORDERED_SET_TYPE std::unordered_set<Key, Hash, KeyEqual, Allocator>
-SET_OPERATORS(UNORDERED_SET_TEMP, UNORDERED_SET_TYPE)
-
-#define SET_TEMP template<class Key, class Compare, class Allocator>
-#define SET_TYPE std::set<Key, Compare, Allocator>
-SET_OPERATORS(SET_TEMP, SET_TYPE)
-
-#define UNORDERED_MAP_TEMP template < class Key, class T, class Hash, class KeyEqual, class Allocator >
-#define UNORDERED_MAP_TYPE std::unordered_map< Key, T, Hash, KeyEqual, Allocator >
-MAP_OPERATORS(UNORDERED_MAP_TEMP, UNORDERED_MAP_TYPE)
-
-#define MAP_TEMP template < class Key, class T, class Compare, class Allocator >
-#define MAP_TYPE std::map< Key, T, Compare, Allocator >
-MAP_OPERATORS(MAP_TEMP, MAP_TYPE)
+#define TEMP template < class Key, class T, class Compare, class Allocator >
+#define TYPE std::map< Key, T, Compare, Allocator >
+#include "map_operators.inl"
+#undef TEMP
+#undef TYPE
 
 #endif
