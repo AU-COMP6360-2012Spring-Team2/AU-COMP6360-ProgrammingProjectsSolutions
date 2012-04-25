@@ -17,6 +17,7 @@ class physical_world {
         }
         mc_vehicle & vehicle_info(unsigned int vehicle_id);
         bool is_in_communication_range(unsigned int vehicle_id_1, unsigned int vehicle_id_2, float communication_range);
+        std::unordered_set<unsigned int> all_vehicles_in_communication_range(float communication_range);
         float distance(unsigned int vehicle_id_1, unsigned int vehicle_id_2);
 };
 
