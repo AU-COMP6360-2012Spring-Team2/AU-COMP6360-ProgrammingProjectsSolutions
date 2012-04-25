@@ -3,6 +3,7 @@
  *
  *  Operators 
  *      + - += -=
+ *      & (intersection)
  *  are supported in following containers:
  *      std::unordered_set
  *      std::unordered_map

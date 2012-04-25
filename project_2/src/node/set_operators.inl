@@ -41,3 +41,12 @@ TYPE operator -  ( const TYPE & lo, const TYPE & ro ) {
             r.insert(*i);
     return r;
 }
+
+TEMP
+TYPE operator & ( const TYPE & lo, const TYPE & ro ) {
+    TYPE r;
+    for(auto i = lo.begin(); i != lo.end(); ++i)
+        if(ro.end() != ro.find(*i))
+            r.insert(*i);
+    return r;
+}
