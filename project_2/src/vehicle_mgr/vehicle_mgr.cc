@@ -9,7 +9,7 @@
 const unsigned short vehicle_mgr::_SPEED_CM_PER_SECOND_MIN = 1000;
 const unsigned short vehicle_mgr::_SPEED_CM_PER_SECOND_MAX = 2000;
 
-vehicle_mgr::vehicle_mgr ( mc * m, unsigned int update_interval_in_milliseconds, std::vector<float> & grid_points_x, std::vector<float> & grid_points_y, std::unordered_map<std::string, location> & initial_locations, unsigned short mean_speed, double prob_turn ) {
+vehicle_mgr::vehicle_mgr ( mc * m, unsigned int update_interval_in_milliseconds, std::vector<float> & grid_points_x, std::vector<float> & grid_points_y, std::unordered_map<unsigned int, location> & initial_locations, unsigned short mean_speed, double prob_turn ) {
     this->_m = m;
     if(prob_turn > 1 && prob_turn < 0) throw ;
     this->_prob_turn = prob_turn;
@@ -59,7 +59,7 @@ vehicle_mgr::vehicle_mgr ( mc * m, unsigned int update_interval_in_milliseconds,
 
             v._acceleration = 0;
 
-            this->_vehicles[mc_vehicle::vehicleID2mcID((unsigned int)counter)] = v;
+            this->_vehicles[mc_vehicle::vehicleID2mcID((unsigned int)i->first)] = v;
         }
     }
 

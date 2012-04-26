@@ -43,14 +43,14 @@ bool parse_arg(int argc, char ** argv, std::string & hostname, in_port_t & port,
     return true;
 }
 
-void parse_config_file(std::string config_file, std::unordered_map<std::string, vehicle_mgr::location> & initial_locations) {
+void parse_config_file(std::string config_file, std::unordered_map<unsigned int, vehicle_mgr::location> & initial_locations) {
     ifstream ifs ( config_file.c_str(), ifstream::in );
     while(ifs.good()){
         std::string line;
         getline(ifs, line);
         stringstream ss(line);
         std::string str;
-        std::string id;
+        unsigned int id;
         float x, y;
         ss >> str >> id >> str >> str >> str >> str >> str >> x >> y;
         initial_locations[id]=vehicle_mgr::location(x, y, 0);
@@ -64,7 +64,7 @@ int main(int argc, char ** argv) {
 
     if (parse_arg(argc, argv, hostname, port, config_file)) {
         mc::initialize(hostname, port);
-        std::unordered_map<std::string, vehicle_mgr::location> initial_locations;
+        std::unordered_map<unsigned int, vehicle_mgr::location> initial_locations;
         parse_config_file(config_file, initial_locations);
         std::vector<float> grid_points_x({0,120,240,360,480,600,720});
         std::vector<float> grid_points_y({0,120,240,360,480,600,720});

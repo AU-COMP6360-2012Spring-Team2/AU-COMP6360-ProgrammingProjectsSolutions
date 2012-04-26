@@ -24,7 +24,7 @@ class vehicle_mgr {
             location(float _x, float _y, float _z) { x=_x; y=_y; z=_z; }
             location(){};
         };
-        vehicle_mgr ( mc * m, unsigned int update_interval_in_milliseconds, std::vector<float> & grid_points_x, std::vector<float> & grid_points_y, std::unordered_map<std::string, location> & initial_locations, unsigned short mean_speed, double prob_turn ) ;
+        vehicle_mgr ( mc * m, unsigned int update_interval_in_milliseconds, std::vector<float> & grid_points_x, std::vector<float> & grid_points_y, std::unordered_map<unsigned int, location> & initial_locations, unsigned short mean_speed, double prob_turn ) ;
         void run();
 };
 
