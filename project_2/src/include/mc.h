@@ -22,17 +22,20 @@ class mc {
         static void initialize( std::string & hostname, in_port_t port ) {
             m = new memcache::Memcache ( hostname, port );
         }
-        void set ( const std::string & key, const std::vector<char> & value ) {
+        void set ( std::string & key, std::vector<char> & value ) {
             time_t expiry = 0;
             uint32_t flags = 0;
             m->set(key, value, expiry, flags);
         }
-        void set_all ( const std::vector<std::string> & keys, const std::vector<std::vector<char> > & values) {
+        void set_all ( std::vector<std::string> & keys, std::vector<std::vector<char> > & values) {
             time_t expiry = 0;
             uint32_t flags = 0;
-            m->setAll( keys, values, expiry, flags );
+            std::vector<std::vector<char> * > v;
+            for(auto i = values.begin(); i != values.end(); ++i)
+                v.push_back(&(*i));
+            m->setAll( keys, v, expiry, flags );
         }
-        void get ( const std::string & key, std::vector<char> & value ) {
+        void get ( std::string & key, std::vector<char> & value ) {
             m->get(key, value);
         }
         std::vector<char> get ( const std::string & key ) {
@@ -41,7 +44,5 @@ class mc {
             return r;
         }
 };
-
-memcache::Memcache * mc::m = NULL;
 
 #endif

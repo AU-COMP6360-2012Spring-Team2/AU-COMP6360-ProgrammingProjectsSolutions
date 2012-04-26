@@ -2,13 +2,12 @@
 #define H_mc_vehicle
 
 #include <vector>
-#include <sstrem>
+#include <sstream>
 #include <cstring>
 
 class mc_vehicle {
     private:
         friend class vehicle_mgr;
-        mc_vehicle () { }
         static const unsigned int MC_VALUE_SIZE = 16;
         float _x, _y, _z;
         unsigned short _speed;
@@ -45,7 +44,7 @@ class mc_vehicle {
 #undef SET
         }
 
-        static unsigned int mcID2vehicleID(std::string & id) {
+        static unsigned int mcID2vehicleID(std::string id) {
             if(!id.find_first_of("VEHICLE:"))
                 throw;
             unsigned int r;
@@ -54,7 +53,7 @@ class mc_vehicle {
             return r;
         }
 
-        static std::string vehicleID2mcID(unsigned int & id) {
+        static std::string vehicleID2mcID(unsigned int id) {
             std::ostringstream convert;
             convert<<"VEHICLE:"<<id;
             return convert.str();
