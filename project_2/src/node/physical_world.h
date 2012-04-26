@@ -9,6 +9,8 @@
 #include "../include/mc_vehicle.h"
 #include "../include/mc.h"
 
+#include <iostream>
+
 class physical_world {
     private:
         mc * _m;
@@ -21,7 +23,7 @@ class physical_world {
 
         physical_world () { }
         physical_world ( const physical_world & ro ) { }
-        physical_world operator= ( const physical_world & ro ) { throw; }
+        physical_world operator= ( const physical_world & ro ) { std::cout<<"= called, is gonna ghrow"; throw; }
 
         void _update_from_memcache();
         void _update_thread_fun();

@@ -3,6 +3,8 @@
 #include <sys/time.h>
 #include <cmath>
 
+#include <iostream>
+
 physical_world * physical_world::_instance = NULL;
 
 void physical_world::_update_from_memcache() {
@@ -12,6 +14,7 @@ void physical_world::_update_from_memcache() {
     std::lock_guard<std::mutex> l(this->_mutex_vehicles);
     for(auto i = this->_vehicles.begin(); i != this->_vehicles.end(); ++i)
         i->second.update_from_memcache(values[i->first]);
+    auto t = this->_vehicles.begin();
 }
 
 void physical_world::_update_thread_fun() {
@@ -28,7 +31,7 @@ void physical_world::initialize(std::string memcache_hostname, in_port_t memcach
         mc_vehicle v;
         _instance->_vehicles[mc_vehicle::vehicleID2mcID(*i)] = v;
     }
-    _instance->_update_interval_in_milliseconds = update_interval_in_milliseconds;
+    _instance->_update_from_memcache();
     _instance->_update_thread = new std::thread(&physical_world::_update_thread_fun, _instance);
 }
 
@@ -46,14 +49,18 @@ bool physical_world::is_in_communication_range(unsigned int vehicle_id_1, unsign
 
 std::unordered_set<unsigned int> physical_world::all_vehicles_in_communication_range(unsigned int vehicle_id, float communication_range) {
     std::lock_guard<std::mutex> l(this->_mutex_vehicles);
+    std::cout<<"1"<<std::endl;
     mc_vehicle & me = this->_vehicles[mc_vehicle::vehicleID2mcID(vehicle_id)];
+    std::cout<<"2"<<std::endl;
     std::unordered_set<unsigned int> r;
+    std::cout<<"3"<<std::endl;
     for(auto i = this->_vehicles.begin(); i != this->_vehicles.end(); ++i)
         if(pow(communication_range,2) >= pow(me.x() - i->second.x(),2) + pow(me.y() - i->second.y(),2)) {
-            unsigned id = mc_vehicle::mcID2vehicleID(i->first);
-            if(id != vehicle_id)
-                r.insert(id);
+            unsigned _id = mc_vehicle::mcID2vehicleID(i->first);
+            if(_id != vehicle_id)
+                r.insert(_id);
         }
+    std::cout<<"4"<<std::endl;
     return r;
 }
 

@@ -4,6 +4,7 @@
 #include <vector>
 #include <sstream>
 #include <cstring>
+#include <sstream>
 
 class mc_vehicle {
     private:
@@ -29,6 +30,7 @@ class mc_vehicle {
         }
 
         void update_from_memcache(const std::vector<char> & value) {
+/*
             int p = 0;
 #define GET(V,SIZE) { memcpy( &(V), &value[0] + p, SIZE); p += SIZE; }
             GET( this->_x               , 4 );
@@ -37,11 +39,22 @@ class mc_vehicle {
             GET( this->_speed           , 2 );
             GET( this->_acceleration    , 2 );
 #undef GET
+*/
+            std::string str(value.begin(), value.end());
+            std::stringstream ss(str);
+            ss>>this->_x>>this->_y>>this->_z>>this->_speed>>this->_acceleration;
         }
 
         void to_memcache(std::vector<char> & value) {
-            int p = 0;
             value.resize( MC_VALUE_SIZE, '?' );
+            std::stringstream ss;
+            ss << this->_x << " " << this->_y << " " << this->_z << " " << this->_speed << " " << this->_acceleration;
+            std::string str = ss.str();
+            value.clear();
+            for(auto i = str.begin(); i != str.end(); ++i)
+                value.push_back(*i);
+/*
+            int p = 0;
 #define SET(V,SIZE) { memcpy( &value[0] + p, &(V), SIZE); p += SIZE; }
             SET( this->_x               , 4 );
             SET( this->_y               , 4 );
@@ -49,6 +62,7 @@ class mc_vehicle {
             SET( this->_speed           , 2 );
             SET( this->_acceleration    , 2 );
 #undef SET
+*/
         }
 
         static unsigned int mcID2vehicleID(std::string id) {

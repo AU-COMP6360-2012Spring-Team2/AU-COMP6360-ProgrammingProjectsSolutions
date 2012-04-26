@@ -143,9 +143,10 @@ void *sender_main (void *context)
     //get pointer to neighbor table
     neighborTable *ntable = s_only->get_nbTable();
     //get the gps coordinate for package generation
-    physical_world &pw = physical_world::get();
-    mc_vehicle &me_move = pw.vehicle_info(myid);  //here not sure how to invoke this method 
+    physical_world *pw = &(physical_world::get());
+    mc_vehicle &me_move = pw->vehicle_info(myid);  //here not sure how to invoke this method 
     map<usint, struct tuxname_port> * name_port = p_conf->get_name_port();
+
    
     //create socket
     int sd;
@@ -157,7 +158,7 @@ void *sender_main (void *context)
     unsigned char tosend[message::MESSAGE_SIZE];
     while(1){
        // get all the current nodes in communication range
-       unordered_set<usint> nodesInRange = pw.all_vehicles_in_communication_range(myid, 100.0);//here not sure how to invoke this method
+       unordered_set<usint> nodesInRange = pw->all_vehicles_in_communication_range(myid, 100.0);//here not sure how to invoke this method
 
         //Now check whether the node itself need to send eebl
         if(myid == 7){         
@@ -308,7 +309,7 @@ void *receiver_hello (void *context){
     MPR_selectors* MPRslt = s_only->get_MPRselectors();
     //get the map which stores all nodes' sockaddr for hello message
     map<usint, struct tuxname_port> * name_port = p_conf->get_name_port_hello();
-    physical_world &pw = physical_world::get();
+    physical_world *pw = &(physical_world::get());
     //create socket
     int sd;
     if ((sd = socket(AF_INET, SOCK_DGRAM, 0)) == -1){
@@ -338,7 +339,7 @@ void *receiver_hello (void *context){
            MPRs = ntable->get_MPRs();
        }
        // get all the current nodes in communication range
-       unordered_set<usint> nodesInRange = pw.all_vehicles_in_communication_range(myid, 100.0);//here not sure how to invoke this method
+       unordered_set<usint> nodesInRange = pw->all_vehicles_in_communication_range(myid, 100.0);//here not sure how to invoke this method
        
        for (auto it = nodesInRange.begin(); it!=nodesInRange.end(); it++){
         struct tuxname_port temp = (*name_port)[*it];

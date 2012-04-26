@@ -28,7 +28,7 @@ extern void *sender_main (void *context);
 //extern void *updater_main (void *context);
 
 int main(int argc, char* argv[]) {
-    if(argc != 4) {
+    if(argc != 5) {
         cout<<"usage: "<<argv[0]<<" [conf_file] [node_id] [memcached_hostname] [memcached_port]"<<endl;
         return 0;
     }
@@ -41,7 +41,7 @@ int main(int argc, char* argv[]) {
     for(auto i = S::get()->get_config()->get_name_port()->begin(); i != S::get()->get_config()->get_name_port()->end(); ++i)
         vehicle_ids.push_back(i->first);
     physical_world::initialize(memcache_hostname, memcache_port, 300, vehicle_ids);
-    S::get()->log("S initialized");
+    S::get()->log("S and physical_world initialized");
 
 //  pthread_cond_t   cond;
 //  pthread_mutex_t  lock;

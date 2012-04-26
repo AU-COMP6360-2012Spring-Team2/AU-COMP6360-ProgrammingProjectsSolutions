@@ -1,6 +1,6 @@
 UNAME := $(shell uname)
 ifeq ($(UNAME), Linux)
-	CXX=g++ -std=c++0x
+	CXX=g++ -std=c++0x -g
 endif
 ifeq ($(UNAME), Darwin)
 	CXX=g++-4.6 -std=c++0x
