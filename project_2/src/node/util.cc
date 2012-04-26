@@ -21,6 +21,7 @@
 #include <arpa/inet.h>
 #include <iostream>
 #include "message.h"
+#include "HelloMsg.h"
 #include "S.h"
 #include "math.h"
 #include "time.h"
