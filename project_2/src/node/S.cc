@@ -127,10 +127,10 @@ void S::log(std::string content) {
     std::cout<<"Timestamp: "<<time(NULL)<<" Node: "<<this->_me->id()<<" "<<content<<endl;
 }
 
-neighborTable* get_nbTable(){
+neighborTable* S::get_nbTable(){
     return this->ntable;
 }
 
-MPR_selectors* get_MPRselectors(){
+MPR_selectors* S::get_MPRselectors(){
     return this->MPRselectors;
 }

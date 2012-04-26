@@ -22,6 +22,7 @@ class configuration{
        // map<usint, vector<usint> > * links;
         map<usint, struct gps > *gps_coordinate; 
         map<usint, struct tuxname_port> *name_port;
+        map<usint, struct tuxname_port> *name_port_hello;
 
     public:
         configuration(string * filename);

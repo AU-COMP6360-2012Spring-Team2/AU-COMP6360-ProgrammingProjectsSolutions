@@ -1,3 +1,5 @@
+#include <vector>
+
 #include "MPR_selectors.h"
 #include "container_operators.h"
 
@@ -21,17 +23,24 @@ void MPR_selectors::newHelloMsg(HelloMsg *m){
 
 void MPR_selectors::update(){
     lock_guard<mutex> lk(m_selectors);
-    auto it = selectors.begin();
     time_t now = time(NULL);
-while(it != selectors.end()){
-if(it->second < now-3){
-    //if the entry is older than 3s, then remove it
-    it = selectors.erase(it);
-}
-else{
-    it++;
-}
-}
+    /*
+    auto it = selectors.begin();
+    while(it != selectors.end()){
+        if(it->second < now-3){
+            //if the entry is older than 3s, then remove it
+            it = selectors.erase(it);
+        }
+        else{
+            it++;
+        }
+    } */
+    std::vector<map<unsigned int, time_t>::iterator> to_erase;
+    for(auto i = selectors.begin(); i != selectors.end(); ++i)
+        if(i->second < now - 3)
+            to_erase.push_back(i);
+    for(auto i = to_erase.begin(); i != to_erase.end(); ++i)
+        selectors.erase(*i);
 }
 
 bool MPR_selectors::isMPRSelector(unsigned int node){

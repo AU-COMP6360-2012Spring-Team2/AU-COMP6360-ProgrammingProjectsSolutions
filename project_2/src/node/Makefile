@@ -10,13 +10,13 @@ endif
 CXXFLAGS += -Wall -I/home/cse_h2/szg0031/include
 LIBS += -lm -lpthread /home/cse_h2/szg0031/lib/libmemcached.a
 
-OBJ=../include/mc.o physical_world.o HelloMsg.o neighborTable.o MPR_selectors.o 
+OBJ=../include/mc.o physical_world.o HelloMsg.o neighborTable.o MPR_selectors.o S.o util.o vehicle.o message.o cache.o configuration.o
 
 all : $(OBJ) main.o
 	$(CXX) $(CFLAGS) -o main.x $(OBJ) main.o $(LIBS)
 
-test : $(OBJ) test.o
-	$(CXX) $(CFLAGS) -o test.x $(OBJ) test.o $(LIBS) && echo && echo "Running test..." && echo && ./test.x
+test : test.o
+	$(CXX) $(CFLAGS) -o test.x test.o $(LIBS) && echo && echo "Running test..." && echo && ./test.x
 
 clean : clean-test
 	rm -f main.x $(OBJ) main.o
