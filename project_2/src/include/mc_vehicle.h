@@ -8,6 +8,7 @@
 class mc_vehicle {
     private:
         friend class vehicle_mgr;
+        friend class physical_world;
         static const unsigned int MC_VALUE_SIZE = 16;
         float _x, _y, _z;
         unsigned short _speed;
@@ -20,6 +21,12 @@ class mc_vehicle {
         static const unsigned int U_TURN = 0b01;
         static const unsigned int TURN = 0b10;
         unsigned int _direction;
+
+        static mc_vehicle create_from_memcache(const std::vector<char> & value) {
+            mc_vehicle r;
+            r.update_from_memcache(value);
+            return r;
+        }
 
         void update_from_memcache(const std::vector<char> & value) {
             int p = 0;

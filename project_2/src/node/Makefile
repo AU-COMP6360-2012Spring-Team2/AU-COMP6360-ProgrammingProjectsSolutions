@@ -7,10 +7,10 @@ ifeq ($(UNAME), Darwin)
 endif
 
 
-CFLAGS += -Wall -I.
-LIBS += -lm -lpthread
+CXXFLAGS += -Wall -I/home/cse_h2/szg0031/include
+LIBS += -lm -lpthread /home/cse_h2/szg0031/lib/libmemcached.a
 
-OBJ= 
+OBJ=../include/mc.o physical_world.o HelloMsg.o neighborTable.o MPR_selectors.o 
 
 all : $(OBJ) main.o
 	$(CXX) $(CFLAGS) -o main.x $(OBJ) main.o $(LIBS)
