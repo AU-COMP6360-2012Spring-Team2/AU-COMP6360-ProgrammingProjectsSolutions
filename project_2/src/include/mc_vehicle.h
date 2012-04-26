@@ -5,6 +5,7 @@
 #include <sstream>
 #include <cstring>
 #include <sstream>
+#include <cstdlib>
 
 class mc_vehicle {
     private:
@@ -68,10 +69,7 @@ class mc_vehicle {
         static unsigned int mcID2vehicleID(std::string id) {
             if(std::string::npos == id.find_first_of("VEHICLE:"))
                 throw;
-            unsigned int r;
-            std::istringstream convert(id);
-            convert >> r;
-            return r;
+            return (unsigned int) atoi(id.substr(8).c_str());
         }
 
         static std::string vehicleID2mcID(unsigned int id) {
