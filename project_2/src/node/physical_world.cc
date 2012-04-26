@@ -49,18 +49,14 @@ bool physical_world::is_in_communication_range(unsigned int vehicle_id_1, unsign
 
 std::unordered_set<unsigned int> physical_world::all_vehicles_in_communication_range(unsigned int vehicle_id, float communication_range) {
     std::lock_guard<std::mutex> l(this->_mutex_vehicles);
-    std::cout<<"1"<<std::endl;
     mc_vehicle & me = this->_vehicles[mc_vehicle::vehicleID2mcID(vehicle_id)];
-    std::cout<<"2"<<std::endl;
     std::unordered_set<unsigned int> r;
-    std::cout<<"3"<<std::endl;
     for(auto i = this->_vehicles.begin(); i != this->_vehicles.end(); ++i)
         if(pow(communication_range,2) >= pow(me.x() - i->second.x(),2) + pow(me.y() - i->second.y(),2)) {
             unsigned int _id = mc_vehicle::mcID2vehicleID(i->first);
             if(_id != vehicle_id)
                 r.insert(_id);
         }
-    std::cout<<"4"<<std::endl;
     return r;
 }
 
