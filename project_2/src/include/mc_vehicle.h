@@ -66,7 +66,7 @@ class mc_vehicle {
         }
 
         static unsigned int mcID2vehicleID(std::string id) {
-            if(!id.find_first_of("VEHICLE:"))
+            if(std::string::npos == id.find_first_of("VEHICLE:"))
                 throw;
             unsigned int r;
             std::istringstream convert(id);

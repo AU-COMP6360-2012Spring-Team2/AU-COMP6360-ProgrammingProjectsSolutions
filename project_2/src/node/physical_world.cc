@@ -56,7 +56,7 @@ std::unordered_set<unsigned int> physical_world::all_vehicles_in_communication_r
     std::cout<<"3"<<std::endl;
     for(auto i = this->_vehicles.begin(); i != this->_vehicles.end(); ++i)
         if(pow(communication_range,2) >= pow(me.x() - i->second.x(),2) + pow(me.y() - i->second.y(),2)) {
-            unsigned _id = mc_vehicle::mcID2vehicleID(i->first);
+            unsigned int _id = mc_vehicle::mcID2vehicleID(i->first);
             if(_id != vehicle_id)
                 r.insert(_id);
         }
