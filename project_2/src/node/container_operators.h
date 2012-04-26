@@ -2,7 +2,7 @@
  *  This headers file defines operators for stl containers.
  *
  *  Operators 
- *      + - += -=
+ *      + - += -= ==
  *      & (intersection)
  *  are supported in following containers:
  *      std::unordered_set

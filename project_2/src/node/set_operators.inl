@@ -50,3 +50,13 @@ TYPE operator & ( const TYPE & lo, const TYPE & ro ) {
             r.insert(*i);
     return r;
 }
+
+TEMP
+bool operator == ( const TYPE & lo, const TYPE & ro ) {
+    if(lo.size() != ro.size())
+        return false;
+    for(auto i = lo.begin(); i != lo.end(); ++i)
+        if(ro.end() == ro.find(*i))
+            return false;
+    return true;
+}
