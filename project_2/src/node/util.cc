@@ -61,6 +61,9 @@ bool prob_rebroadcast(struct gps &me, struct gps &sender){
 */
 void *recver_main (void *context)
 {
+        
+
+    cout<<"recver main is up "<<endl;
     S* s_only = S::get();
     //get the node id
     const vehicle *me = s_only->me();
@@ -133,6 +136,7 @@ void *recver_main (void *context)
 
 void *sender_main (void *context)
 {
+    cout<<"sender main is up "<<endl;
     S* s_only = S::get();
     //get the node id
     const vehicle *me = s_only->me();
@@ -255,6 +259,8 @@ void *sender_main (void *context)
 */
 
 void *receiver_hello (void *context){
+
+    cout<<"receiver_hello main is up "<<endl;
     S* s_only = S::get();
     //get the node id
     const vehicle *me = s_only->me();
@@ -297,6 +303,7 @@ void *receiver_hello (void *context){
 
 
  void *sender_hello (void *context){
+    cout<<"sender_hello main is up "<<endl;
     S* s_only = S::get();
     //get the node id
     const vehicle *me = s_only->me();
