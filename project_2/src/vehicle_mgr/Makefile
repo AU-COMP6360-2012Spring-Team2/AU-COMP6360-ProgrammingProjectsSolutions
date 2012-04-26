@@ -8,9 +8,9 @@ endif
 
 
 CXXFLAGS += -Wall -I/home/cse_h2/szg0031/include
-LIBS += /home/cse_h2/szg0031/lib/libmemcached.a
+LIBS += 
 
-OBJ=../include/mc.o vehicle_mgr.o
+OBJ= vehicle_mgr.o
 
 all : $(OBJ) main.o
 	$(CXX) $(INC) $(CFLAGS) -o vmgr.x $(OBJ) main.o $(LIBS)

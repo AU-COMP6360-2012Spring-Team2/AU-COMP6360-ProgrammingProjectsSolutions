@@ -30,19 +30,17 @@ extern void *receiver_hello (void *context);
 //extern void *updater_main (void *context);
 
 int main(int argc, char* argv[]) {
-    if(argc != 5) {
-        cout<<"usage: "<<argv[0]<<" [conf_file] [node_id] [memcached_hostname] [memcached_port]"<<endl;
+    if(argc != 3) {
+        cout<<"usage: "<<argv[0]<<" [conf_file] [node_id]" << endl;
         return 0;
     }
     string conf_file = argv[1];
     unsigned int nodeid = atoi(argv[2]);
-    std::string memcache_hostname(argv[3]);
-    in_port_t memcache_port = (in_port_t) atoi(argv[4]);
     S::initialize(&conf_file, nodeid);
     std::vector<unsigned int> vehicle_ids;
     for(auto i = S::get()->get_config()->get_name_port()->begin(); i != S::get()->get_config()->get_name_port()->end(); ++i)
         vehicle_ids.push_back(i->first);
-    physical_world::initialize(memcache_hostname, memcache_port, 300, vehicle_ids);
+    physical_world::initialize("/home/cse_h2/szg0031/src/AU-COMP6360-ProgrammingProjectsSolutions/project_2/src/locations", 300, vehicle_ids);
     S::get()->log("S and physical_world initialized");
 
 //  pthread_cond_t   cond;

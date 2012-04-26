@@ -5,12 +5,13 @@
 #include <cmath>
 #include <algorithm>
 #include <cstdlib>
+#include <fstream>
 
-const unsigned short vehicle_mgr::_SPEED_CM_PER_SECOND_MIN = 1000;
-const unsigned short vehicle_mgr::_SPEED_CM_PER_SECOND_MAX = 2000;
+const unsigned short vehicle_mgr::_SPEED_CM_PER_SECOND_MIN = 0;
+const unsigned short vehicle_mgr::_SPEED_CM_PER_SECOND_MAX = 0;
 
-vehicle_mgr::vehicle_mgr ( mc * m, unsigned int update_interval_in_milliseconds, std::vector<float> & grid_points_x, std::vector<float> & grid_points_y, std::unordered_map<unsigned int, location> & initial_locations, unsigned short mean_speed, double prob_turn ) {
-    this->_m = m;
+vehicle_mgr::vehicle_mgr ( std::string shared_location_file, unsigned int update_interval_in_milliseconds, std::vector<float> & grid_points_x, std::vector<float> & grid_points_y, std::unordered_map<unsigned int, location> & initial_locations, unsigned short mean_speed, double prob_turn ) {
+    this->_shared_location_file = shared_location_file;
     if(prob_turn > 1 && prob_turn < 0) throw ;
     this->_prob_turn = prob_turn;
     this->_grid_points_x = grid_points_x;
@@ -93,16 +94,11 @@ bool vehicle_mgr::_find_grid_point(float current, float change, bool is_x, float
 void vehicle_mgr::run() {
     while(true) {
         { // send update to memcached
-            std::vector<std::string> keys;
-            std::vector<std::vector<char>> values;
-            for(auto i = this->_vehicles.begin(); i != this->_vehicles.end(); ++i) {
-                keys.push_back(i->first);
-                std::vector<char> value;
-                i->second.to_memcache(value);
-                values.push_back(value);
-            }
-            this->_m->set_all(keys, values);
-            usleep(1000 * this->_update_interval_in_milliseconds);
+            std::ofstream of(this->_shared_location_file);
+            for(auto i = this->_vehicles.begin(); i != this->_vehicles.end(); ++i)
+                of<<i->first<<"\t"<<i->second.x()<<"\t"<<i->second.y()<<"\t"<<i->second.z()<<"\t"<<i->second.speed_cm_per_second()<<"\t"<<i->second.acceleration_cm_per_squared_second()<<std::endl;
+           usleep(1000 * this->_update_interval_in_milliseconds);
+           break;
         }
 
         { // update vehicles

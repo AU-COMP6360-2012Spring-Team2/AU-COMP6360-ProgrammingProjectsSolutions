@@ -3,12 +3,11 @@
 
 #include <unordered_map>
 
-#include "../include/mc.h"
 #include "../include/mc_vehicle.h"
 
 class vehicle_mgr {
     private:
-        mc * _m;
+        std::string _shared_location_file;
         unsigned int _update_interval_in_milliseconds;
         double _prob_turn;
         std::vector<float> _grid_points_x;
@@ -24,7 +23,7 @@ class vehicle_mgr {
             location(float _x, float _y, float _z) { x=_x; y=_y; z=_z; }
             location(){};
         };
-        vehicle_mgr ( mc * m, unsigned int update_interval_in_milliseconds, std::vector<float> & grid_points_x, std::vector<float> & grid_points_y, std::unordered_map<unsigned int, location> & initial_locations, unsigned short mean_speed, double prob_turn ) ;
+        vehicle_mgr ( std::string shared_location_file, unsigned int update_interval_in_milliseconds, std::vector<float> & grid_points_x, std::vector<float> & grid_points_y, std::unordered_map<unsigned int, location> & initial_locations, unsigned short mean_speed, double prob_turn ) ;
         void run();
 };
 

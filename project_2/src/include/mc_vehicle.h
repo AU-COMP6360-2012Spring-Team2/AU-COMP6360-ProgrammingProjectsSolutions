@@ -1,6 +1,7 @@
 #ifndef H_mc_vehicle
 #define H_mc_vehicle
 
+#include <iostream>
 #include <vector>
 #include <sstream>
 #include <cstring>

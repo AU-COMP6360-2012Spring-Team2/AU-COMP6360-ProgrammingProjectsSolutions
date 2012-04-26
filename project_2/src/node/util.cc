@@ -345,8 +345,17 @@ void *sender_hello (void *context){
         if(ntable->tableChanged()){
             MPRs = ntable->get_MPRs();
         }
+        std::cout<<"MPRs: ";
+        for(auto i = MPRs.begin(); i != MPRs.end(); ++i)
+            std::cout<<*i<<" ";
+        std::cout<<std::endl;
         // get all the current nodes in communication range
         unordered_set<usint> nodesInRange = pw->all_vehicles_in_communication_range(myid, 100.0);//here not sure how to invoke this method
+        std::cout<<"nodesInRange: ";
+        for(auto i = nodesInRange.begin(); i != nodesInRange.end(); ++i)
+            std::cout<<*i<<" ";
+        std::cout<<std::endl;
+
 
         for (auto it = nodesInRange.begin(); it!=nodesInRange.end(); it++){
             struct tuxname_port temp = (*name_port)[*it];
