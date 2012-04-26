@@ -25,6 +25,8 @@ using namespace std;
 
 extern void *recver_main (void *context);
 extern void *sender_main (void *context);
+extern void *sender_hello (void *context);
+extern void *receiver_hello (void *context);
 //extern void *updater_main (void *context);
 
 int main(int argc, char* argv[]) {
@@ -47,6 +49,8 @@ int main(int argc, char* argv[]) {
 //  pthread_mutex_t  lock;
     pg_thread_t      recver;
     pg_thread_t      sender;
+    pg_thread_t      sender_hel;
+    pg_thread_t      receiver_hel;
 //  pg_thread_t      updater;
 
 
@@ -70,6 +74,28 @@ int main(int argc, char* argv[]) {
     pthread_create(&sender.thread,
             &sender.attr,
             sender_main, NULL);
+
+    memset(&sender_hel, 0, sizeof(pg_thread_t));
+    sender_hel.stop = 0;
+    sender_hel.context = NULL;
+    pthread_attr_init(&sender_hel.attr);
+    pthread_attr_setdetachstate(&sender_hel.attr, PTHREAD_CREATE_JOINABLE);
+    pthread_create(&sender_hel.thread,
+            &sender_hel.attr,
+            sender_hello, NULL);
+
+
+
+    memset(&receiver_hel, 0, sizeof(pg_thread_t));
+    receiver_hel.stop = 0;
+    receiver_hel.context = NULL;
+    pthread_attr_init(&receiver_hel.attr);
+    pthread_attr_setdetachstate(&receiver_hel.attr, PTHREAD_CREATE_JOINABLE);
+    pthread_create(&receiver_hel.thread,
+            &receiver_hel.attr,
+            receiver_hello, NULL);
+
+
 
     /* Initialize update thread */
     /*
