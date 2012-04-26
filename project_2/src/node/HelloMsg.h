@@ -6,12 +6,12 @@ class HelloMsg{
     private:
         unsigned int originator;
         unsigned char link_status;
-        //give a fixed size neighbor list, will fill with uint type's max value if the node's neighbors is less than 10
-        unsigned int neighbors[10];
+        //give a fixed size neighbor list, will fill with uint type's max value if the node's neighbors is less than 30
+        unsigned int neighbors[30];
      //here don't know whether 10 is big enough, need to test
     public:
-        //the total size for Hello msg is 45 bytes. 4 + 1 + 4*10
-        static const unsigned int HELLOMSG_SIZE = 45;
+        //the total size for Hello msg is 45 bytes. 4 + 1 + 4*30
+        static const unsigned int HELLOMSG_SIZE = 125;
         //consts for link status
         static const unsigned char UNIDIRECTION = 1;
         static const unsigned char BIDIRECTION = 2;

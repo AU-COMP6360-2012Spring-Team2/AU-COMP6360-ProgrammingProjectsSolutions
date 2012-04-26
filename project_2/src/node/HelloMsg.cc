@@ -12,7 +12,7 @@ HelloMsg * HelloMsg::create_Hello(unsigned int o, unsigned char s, const unorder
        m->neighbors[j++] = *it;
     }
 
-    for(; j < 10; j++){
+    for(; j < 30; j++){
         m->neighbors[j] = numeric_limits<unsigned int>::max();
     }
     return m;
@@ -33,7 +33,7 @@ unsigned int HelloMsg::getOriginator(){
 unordered_set<unsigned int> HelloMsg::getNeighbors(){
    
     unordered_set<unsigned int> temp;
-    for(int i = 0; i < 10; i++){
+    for(int i = 0; i < 30; i++){
         if(neighbors[i] != numeric_limits<unsigned int>::max()){
             temp.insert(neighbors[i]);
         }
@@ -46,13 +46,13 @@ void HelloMsg::to_bytes(unsigned char buffer[]) const {
    
   memcpy(buffer, &(this->originator), 4);
   memcpy(buffer+4, &(this->link_status), 1);
-  memcpy(buffer+5, this->neighbors, 40);
+  memcpy(buffer+5, this->neighbors,120);
 }
 
 HelloMsg* HelloMsg::from_bytes(const unsigned char data[]){
     HelloMsg *m = new HelloMsg;
     memcpy(&(m->originator), data, 4);
     memcpy(&(m->link_status), data+4, 1);
-    memcpy((m->neighbors), data+5, 40);
+    memcpy((m->neighbors), data+5, 120);
     return m;
 }
