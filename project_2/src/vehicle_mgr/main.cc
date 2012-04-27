@@ -52,8 +52,8 @@ int main(int argc, char ** argv) {
     if (parse_arg(argc, argv, config_file)) {
         std::unordered_map<unsigned int, vehicle_mgr::location> initial_locations;
         parse_config_file(config_file, initial_locations);
-        std::vector<float> grid_points_x({0,120,240,360,480,600,720});
-        std::vector<float> grid_points_y({0,120,240,360,480,600,720});
+        std::vector<float> grid_points_x({0,120,240,360,480});
+        std::vector<float> grid_points_y({0,120,240,360,480});
         vehicle_mgr vm("../locations", 200, grid_points_x, grid_points_y, initial_locations, (vehicle_mgr::_SPEED_CM_PER_SECOND_MIN + vehicle_mgr::_SPEED_CM_PER_SECOND_MAX) / 2, .4);
         vm.run();
     }

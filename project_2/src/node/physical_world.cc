@@ -2,14 +2,24 @@
 
 #include <sys/time.h>
 #include <cmath>
+#include <cstdlib>
 
 #include <iostream>
 #include <fstream>
+#include <sstream>
 
 physical_world * physical_world::_instance = NULL;
 
 void physical_world::_update_from_memcache() {
-    std::ifstream ifs(this->_shared_config_file);
+    /*std::stringstream ss;
+    ss<<"/tmp/location-"<<this->_me_id;
+    std::stringstream ssc;
+    ssc<<"/bin/cp "<<this->_shared_config_file<<" "<<ss.str();
+    system(ssc.str().c_str());
+    std::ifstream ifs;
+    ifs.open(ss.str());*/
+    std::ifstream ifs;
+    ifs.open(this->_shared_config_file);
     if(!ifs)
         std::cout<<"aaaaa cannot open1111111!!!!!!"<<this->_shared_config_file<<std::endl;
     while(!ifs.eof()){
@@ -18,23 +28,31 @@ void physical_world::_update_from_memcache() {
         unsigned short speed;
         short accer;
         ifs>>id>>x>>y>>z>>speed>>accer;
-        this->_vehicles[id]._x = x;
-        this->_vehicles[id]._y = y;
-        this->_vehicles[id]._z = z;
-        this->_vehicles[id]._speed = speed;
-        this->_vehicles[id]._acceleration = accer;
+        std::cout<<"nodesIn"<<id<<" "<<x<<" "<<y<<" "<<speed<<" "<<accer<<" "<<std::endl;
+        if(!id.empty() && id!="") {
+            this->_vehicles[id]._x = x;
+            this->_vehicles[id]._y = y;
+            this->_vehicles[id]._z = z;
+            this->_vehicles[id]._speed = speed;
+            this->_vehicles[id]._acceleration = accer;
+            std::cout<<"read: "<<id<<" "<<this->_vehicles[id]._x<<" "<<this->_vehicles[id]._y<<std::endl;
+        }
     }
+    ifs.close();
 }
 
 void physical_world::_update_thread_fun() {
-    usleep(1000 * this->_update_interval_in_milliseconds);
-    this->_update_from_memcache();
+    while(true) {
+        usleep(1000 * this->_update_interval_in_milliseconds);
+        this->_update_from_memcache();
+    }
 }
 
-void physical_world::initialize(std::string shared_config_file, unsigned int update_interval_in_milliseconds, std::vector<unsigned int> vehicle_id) {
+void physical_world::initialize(std::string shared_config_file, unsigned int update_interval_in_milliseconds, std::vector<unsigned int> vehicle_id, unsigned int me_id) {
     physical_world::_instance = new physical_world;
     _instance->_shared_config_file = shared_config_file;
     _instance->_update_interval_in_milliseconds = update_interval_in_milliseconds;
+    _instance->_me_id = me_id;
     for(auto i = vehicle_id.begin(); i != vehicle_id.end(); ++i){
         mc_vehicle v;
         _instance->_vehicles[mc_vehicle::vehicleID2mcID(*i)] = v;

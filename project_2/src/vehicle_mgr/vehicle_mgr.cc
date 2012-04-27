@@ -105,9 +105,11 @@ void vehicle_mgr::_correct_out_of_boundary(mc_vehicle & v) { // check if out of 
 void vehicle_mgr::run() {
     while(true) {
         { // send update to memcached
-            std::ofstream of(this->_shared_location_file);
+            std::ofstream of;
+            of.open(this->_shared_location_file);
             for(auto i = this->_vehicles.begin(); i != this->_vehicles.end(); ++i)
                 of<<i->first<<"\t"<<i->second.x()<<"\t"<<i->second.y()<<"\t"<<i->second.z()<<"\t"<<i->second.speed_cm_per_second()<<"\t"<<i->second.acceleration_cm_per_squared_second()<<std::endl;
+            of.close();
             usleep(1000 * this->_update_interval_in_milliseconds);
         }
 

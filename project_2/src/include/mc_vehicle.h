@@ -68,8 +68,10 @@ class mc_vehicle {
         }
 
         static unsigned int mcID2vehicleID(std::string id) {
-            if(std::string::npos == id.find_first_of("VEHICLE:"))
+            if(std::string::npos == id.find_first_of("VEHICLE:")){
+                std::cerr<<"vehicle name not compatible. \""<<id<<"\" is got."<<std::endl;
                 throw;
+            }
             return (unsigned int) atoi(id.substr(8).c_str());
         }
 

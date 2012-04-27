@@ -40,7 +40,7 @@ int main(int argc, char* argv[]) {
     std::vector<unsigned int> vehicle_ids;
     for(auto i = S::get()->get_config()->get_name_port()->begin(); i != S::get()->get_config()->get_name_port()->end(); ++i)
         vehicle_ids.push_back(i->first);
-    physical_world::initialize("/home/cse_h2/szg0031/src/AU-COMP6360-ProgrammingProjectsSolutions/project_2/src/locations", 300, vehicle_ids);
+    physical_world::initialize("/home/cse_h2/szg0031/src/AU-COMP6360-ProgrammingProjectsSolutions/project_2/src/locations", 3000, vehicle_ids, nodeid);
     S::get()->log("S and physical_world initialized");
 
 //  pthread_cond_t   cond;
