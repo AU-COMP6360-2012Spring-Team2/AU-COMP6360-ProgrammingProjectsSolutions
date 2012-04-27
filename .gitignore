@@ -13,3 +13,7 @@
 
 # Compiled Executables
 *.x
+
+# Other files
+project_2/src/node/log
+project_2/src/locations
