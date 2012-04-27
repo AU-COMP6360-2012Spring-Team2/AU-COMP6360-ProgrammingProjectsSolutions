@@ -21,21 +21,19 @@ void physical_world::_update_from_memcache() {
     std::ifstream ifs;
     ifs.open(this->_shared_config_file);
     if(!ifs)
-        std::cout<<"aaaaa cannot open1111111!!!!!!"<<this->_shared_config_file<<std::endl;
+        std::cerr<<"aaaaa cannot open1111111!!!!!!"<<this->_shared_config_file<<std::endl;
     while(!ifs.eof()){
         std::string id;
         float x,y,z;
         unsigned short speed;
         short accer;
         ifs>>id>>x>>y>>z>>speed>>accer;
-        std::cout<<"nodesIn"<<id<<" "<<x<<" "<<y<<" "<<speed<<" "<<accer<<" "<<std::endl;
         if(!id.empty() && id!="") {
             this->_vehicles[id]._x = x;
             this->_vehicles[id]._y = y;
             this->_vehicles[id]._z = z;
             this->_vehicles[id]._speed = speed;
             this->_vehicles[id]._acceleration = accer;
-            std::cout<<"read: "<<id<<" "<<this->_vehicles[id]._x<<" "<<this->_vehicles[id]._y<<std::endl;
         }
     }
     ifs.close();
@@ -79,9 +77,7 @@ std::unordered_set<unsigned int> physical_world::all_vehicles_in_communication_r
     std::unordered_set<unsigned int> r;
     for(auto i = this->_vehicles.begin(); i != this->_vehicles.end(); ++i)
     {
-        std::cout<<"comparing me("<<me.x()<<","<<me.y()<<") and i("<<i->second.x()<<","<<i->second.y()<<")"<<std::endl;
         if(pow(communication_range,2) >= pow(me.x() - i->second.x(),2) + pow(me.y() - i->second.y(),2)) {
-            std::cout<<"comparing me("<<me.x()<<","<<me.y()<<") and i("<<i->second.x()<<","<<i->second.y()<<") are in range"<<std::endl;
             unsigned int _id = mc_vehicle::mcID2vehicleID(i->first);
             if(_id != vehicle_id)
                 r.insert(_id);

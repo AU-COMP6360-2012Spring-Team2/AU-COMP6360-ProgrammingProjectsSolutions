@@ -108,7 +108,7 @@ void *recver_main (void *context)
             if(!cache->has_recently_seen_eebl_of(recvmsg->originator_id(), recvmsg->packet_id())){
                 //here we add the new eebl to cache, don't explicitly delete
                 //it in recver, cache will automatically delete it when expire
-                cache->new_message(recvmsg);
+               // cache->new_message(recvmsg);
                 usint senderid = recvmsg->sender_id();
 
                 //decide whether to rebroadcast
@@ -118,8 +118,10 @@ void *recver_main (void *context)
                     s_only->eebl_enqueue(recvmsg);
                     s_only->log("Will rebroadcast this EEBL");
                 }
-                else
+                else{
                     s_only->log("Won't rebroadcast this EEBL");
+                    delete recvmsg;
+                }
             }
             else{
                 //if eebl is already in cache
@@ -129,7 +131,8 @@ void *recver_main (void *context)
         }
         else{
             //if received msg is beacon
-            cache->new_message(recvmsg);
+            //cache->new_message(recvmsg);
+            delete recvmsg;
         }
 
     }
@@ -173,6 +176,7 @@ void *sender_main (void *context)
                     me_move.z(),me_move.speed_cm_per_second(),me_move.acceleration_cm_per_squared_second());   
             s_only->log("I am generating EEBL and sending out it!");
             eebl->to_bytes(tosend);
+            s_only->incEEBL();
             for (auto it = nodesInRange.begin(); it!=nodesInRange.end(); it++){
                 struct tuxname_port temp = (*name_port)[*it];
                 struct sockaddr_in socktemp = convt2sockaddr(temp);
@@ -189,7 +193,8 @@ void *sender_main (void *context)
 
         //check whether need to rebroadcast eebl
         while(!(s_only->eebl_queue_empty()))
-        {
+        {   
+            s_only->incEEBLREB();
             message *reb = s_only->eebl_dequeue();
             //here assume reb is not deleted by cache yet
             std::stringstream ss;
@@ -210,8 +215,8 @@ void *sender_main (void *context)
                     sendto(sd,tosend, message::MESSAGE_SIZE,0,(struct sockaddr *) &(socktemp),sizeof(struct sockaddr_in));
                 }
             }
-
-
+            
+            delete reb;
             delete rebroadcast;
 
 
@@ -224,6 +229,7 @@ void *sender_main (void *context)
                     me_move.z(),me_move.speed_cm_per_second(),me_move.acceleration_cm_per_squared_second());
 
             beacon->to_bytes(tosend);
+            s_only->incBEACON();
             for (auto it = nodesInRange.begin(); it!=nodesInRange.end(); it++){
                 struct tuxname_port temp = (*name_port)[*it];
                 struct sockaddr_in socktemp = convt2sockaddr(temp);
@@ -296,6 +302,15 @@ void *receiver_hello (void *context){
 
         recvfrom(sd,recvbuffer, HelloMsg::HELLOMSG_SIZE,0,NULL,NULL);
         HelloMsg* recvmsg = HelloMsg::from_bytes(recvbuffer);
+        std::cout<<"Received hello from "<<recvmsg->getOriginator();
+        unordered_set<usint> nbs = recvmsg->getNeighbors();
+        std::cout<<" neighbors: ";
+        for(auto i = nbs.begin(); i != nbs.end(); ++i)
+            std::cout<<*i<<" ";
+        std::cout<<std::endl;
+    
+
+
         ntable->newHelloMsg(recvmsg);
         MPRslt->newHelloMsg(recvmsg);
         delete recvmsg;
@@ -335,6 +350,13 @@ void *sender_hello (void *context){
         MPRslt->update();
         //get 1 hop neighbors from neighbor table to construct hello message
         unordered_set<usint> neighbors = ntable->get_1hop_neighbors();
+        std::cout<<"neighbors: ";
+        for(auto i = neighbors.begin(); i != neighbors.end(); ++i)
+            std::cout<<*i<<" ";
+        std::cout<<std::endl;
+    
+        
+        
         //construct hello msg with bidirectional link status
         HelloMsg* m1 = HelloMsg::create_Hello(myid, HelloMsg::BIDIRECTION, neighbors);
         m1->to_bytes(tosend1);
@@ -342,9 +364,9 @@ void *sender_hello (void *context){
         HelloMsg* m2 = HelloMsg::create_Hello(myid, HelloMsg::MPR, neighbors);
         m2->to_bytes(tosend2);
         //if table is changed since last computing MPRs, then recompute
-        if(ntable->tableChanged()){
+//        if(ntable->tableChanged()){
             MPRs = ntable->get_MPRs();
-        }
+  //      }
         std::cout<<"MPRs: ";
         for(auto i = MPRs.begin(); i != MPRs.end(); ++i)
             std::cout<<*i<<" ";
@@ -373,6 +395,7 @@ void *sender_hello (void *context){
 
         delete m1;
         delete m2;
+
         sleep(1);
     }
 }

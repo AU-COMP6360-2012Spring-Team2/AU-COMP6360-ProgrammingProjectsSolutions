@@ -112,6 +112,8 @@ int main(int argc, char* argv[]) {
 
     pthread_join(recver.thread, NULL);
     pthread_join(sender.thread, NULL);
+    pthread_join(receiver_hel.thread, NULL);
+    pthread_join(sender_hel.thread, NULL);
 //    pthread_join(updater.thread, NULL);
 
     return 0;

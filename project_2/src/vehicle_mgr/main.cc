@@ -9,22 +9,32 @@
 using namespace std;
 
 bool wrong_arg(char * argv0) {
-    cout<<"usage: "<<argv0<<" -c config_file"<<endl; 
+    cout<<"usage: "<<argv0<<" -c config_file [-s]"<<endl; 
     return false;
 }
 
 bool parse_arg(int argc, char ** argv, std::string & config_file) {
     int c;
-    bool c_flag = false;
-    while ((c = getopt ( argc, argv, "c:")) != -1)
+    bool c_flag = false, s_flag = false;
+    while ((c = getopt ( argc, argv, "c:s")) != -1)
         switch (c) {
            case 'c':
                 c_flag = true;
                 config_file = std::string(optarg);
                 break;
+           case 's':
+                vehicle_mgr::_SPEED_CM_PER_SECOND_MIN = 0;
+                vehicle_mgr::_SPEED_CM_PER_SECOND_MAX = 0;
+                s_flag = true;
+                break;
             default:
                 return wrong_arg(argv[0]);
         }
+
+    if (!c_flag) {
+        vehicle_mgr::_SPEED_CM_PER_SECOND_MIN = 1000;
+        vehicle_mgr::_SPEED_CM_PER_SECOND_MAX = 2000;
+     }
 
     if (!c_flag)
         return wrong_arg(argv[0]);

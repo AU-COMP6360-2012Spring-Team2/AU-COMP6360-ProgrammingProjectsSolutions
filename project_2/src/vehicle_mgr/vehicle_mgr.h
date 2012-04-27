@@ -17,8 +17,8 @@ class vehicle_mgr {
         void _correct_out_of_boundary(mc_vehicle & v);
 
     public:
-        static const unsigned short _SPEED_CM_PER_SECOND_MIN;
-        static const unsigned short _SPEED_CM_PER_SECOND_MAX;
+        static unsigned short _SPEED_CM_PER_SECOND_MIN;
+        static unsigned short _SPEED_CM_PER_SECOND_MAX;
         struct location {
             float x, y, z;
             location(float _x, float _y, float _z) { x=_x; y=_y; z=_z; }

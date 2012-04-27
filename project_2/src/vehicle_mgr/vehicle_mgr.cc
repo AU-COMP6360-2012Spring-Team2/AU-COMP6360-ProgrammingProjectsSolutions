@@ -7,8 +7,8 @@
 #include <cstdlib>
 #include <fstream>
 
-const unsigned short vehicle_mgr::_SPEED_CM_PER_SECOND_MIN = 1000;
-const unsigned short vehicle_mgr::_SPEED_CM_PER_SECOND_MAX = 2000;
+unsigned short vehicle_mgr::_SPEED_CM_PER_SECOND_MIN = 1000;
+unsigned short vehicle_mgr::_SPEED_CM_PER_SECOND_MAX = 2000;
 
 vehicle_mgr::vehicle_mgr ( std::string shared_location_file, unsigned int update_interval_in_milliseconds, std::vector<float> & grid_points_x, std::vector<float> & grid_points_y, std::unordered_map<unsigned int, location> & initial_locations, unsigned short mean_speed, double prob_turn ) {
     this->_shared_location_file = shared_location_file;
