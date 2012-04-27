@@ -14,6 +14,7 @@ class vehicle_mgr {
         std::vector<float> _grid_points_y;
         std::unordered_map<std::string, mc_vehicle> _vehicles;
         bool _find_grid_point(float current, float change, bool is_x, float * first_point = NULL);
+        void _correct_out_of_boundary(mc_vehicle & v);
 
     public:
         static const unsigned short _SPEED_CM_PER_SECOND_MIN;

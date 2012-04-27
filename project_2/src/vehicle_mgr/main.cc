@@ -43,7 +43,6 @@ void parse_config_file(std::string config_file, std::unordered_map<unsigned int,
         float x, y;
         ss >> str >> id >> str >> str >> str >> str >> str >> x >> y ;
         initial_locations[id]=vehicle_mgr::location(x, y, 0);
-        std::cout<<id<<" "<<x<<" "<<y<<std::endl;
     }
     ifs.close();
 }

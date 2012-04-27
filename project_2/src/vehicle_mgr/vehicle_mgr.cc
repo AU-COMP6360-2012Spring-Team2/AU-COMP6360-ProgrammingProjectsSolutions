@@ -7,8 +7,8 @@
 #include <cstdlib>
 #include <fstream>
 
-const unsigned short vehicle_mgr::_SPEED_CM_PER_SECOND_MIN = 0;
-const unsigned short vehicle_mgr::_SPEED_CM_PER_SECOND_MAX = 0;
+const unsigned short vehicle_mgr::_SPEED_CM_PER_SECOND_MIN = 1000;
+const unsigned short vehicle_mgr::_SPEED_CM_PER_SECOND_MAX = 2000;
 
 vehicle_mgr::vehicle_mgr ( std::string shared_location_file, unsigned int update_interval_in_milliseconds, std::vector<float> & grid_points_x, std::vector<float> & grid_points_y, std::unordered_map<unsigned int, location> & initial_locations, unsigned short mean_speed, double prob_turn ) {
     this->_shared_location_file = shared_location_file;
@@ -68,12 +68,11 @@ vehicle_mgr::vehicle_mgr ( std::string shared_location_file, unsigned int update
 
 bool vehicle_mgr::_find_grid_point(float current, float change, bool is_x, float * first_point) {
     std::vector<float> & _grid_points = is_x ? this->_grid_points_x : this->_grid_points_y;
-    float lower = std::min(current, current + change);
-    float upper = std::max(current, current + change);
+    float new_ = current + change;
     std::vector<float> grid_points_found;
     bool r = false;
     for(auto i = _grid_points.begin(); i != _grid_points.end(); ++i)
-        if(lower <= *i && *i <= upper) {
+        if( (current < *i && *i <= new_) || (current > *i && *i >= new_) ) {
             r = true;
             if(first_point)
                 grid_points_found.push_back(*i);
@@ -91,14 +90,25 @@ bool vehicle_mgr::_find_grid_point(float current, float change, bool is_x, float
     return r;
 }
 
+void vehicle_mgr::_correct_out_of_boundary(mc_vehicle & v) { // check if out of boundary
+    if(v._x > this->_grid_points_x.back())
+        v._x = v._x - (this->_grid_points_x.back() - this->_grid_points_x.front());
+    else if(v._x < this->_grid_points_x.front())
+        v._x = v._x + (this->_grid_points_x.back() - this->_grid_points_x.front());
+    if(v._y > this->_grid_points_y.back())
+        v._y = v._y - (this->_grid_points_y.back() - this->_grid_points_y.front());
+    else if(v._y < this->_grid_points_y.front())
+        v._y = v._y + (this->_grid_points_y.back() - this->_grid_points_y.front());
+}
+
+
 void vehicle_mgr::run() {
     while(true) {
         { // send update to memcached
             std::ofstream of(this->_shared_location_file);
             for(auto i = this->_vehicles.begin(); i != this->_vehicles.end(); ++i)
                 of<<i->first<<"\t"<<i->second.x()<<"\t"<<i->second.y()<<"\t"<<i->second.z()<<"\t"<<i->second.speed_cm_per_second()<<"\t"<<i->second.acceleration_cm_per_squared_second()<<std::endl;
-           usleep(1000 * this->_update_interval_in_milliseconds);
-           break;
+            usleep(1000 * this->_update_interval_in_milliseconds);
         }
 
         { // update vehicles
@@ -106,11 +116,11 @@ void vehicle_mgr::run() {
 
                 // compute change
                 float x_change, y_change;
-                x_change =((v->second._direction >> 1) != 1 ? 0 : // whether the direction is E-W
+                x_change =((v->second._direction & 0b10) != 0b10 ? 0 : // whether the direction is E-W
                         (- ((v->second._direction & 0b1) * 2 - 1 ) ) * // determine whether it's E or W
                         (v->second._speed * this->_update_interval_in_milliseconds / 1000.0 / 100.0) // convert to meters
                         );
-                y_change = ((v->second._direction >> 1) != 0 ? 0 : // whether the direction is N-S
+                y_change = ((v->second._direction & 0b10) != 0b00 ? 0 : // whether the direction is N-S
                         (- ((v->second._direction & 0b1) * 2 - 1 ) ) * // determine whether it's N or S
                         (v->second._speed * this->_update_interval_in_milliseconds / 1000.0 / 100.0) // convert to meters
                         );
@@ -119,23 +129,9 @@ void vehicle_mgr::run() {
                     static std::ranlux64_base_01 eng;
                     static std::uniform_real<double> turn_dist;
                     double turn_p = turn_dist(eng);
-                    if(turn_p > this->_prob_turn) { // no need to turn
-                        v->second._x = v->second._x + x_change;
-                        v->second._y = v->second._y + y_change;
-                        { // check if out of boundary
-                            if(v->second._x > this->_grid_points_x.back())
-                                v->second._x = v->second._x - (this->_grid_points_x.back() - this->_grid_points_x.front());
-                            else if(v->second._x < this->_grid_points_x.front())
-                                v->second._x = v->second._x + (this->_grid_points_x.back() - this->_grid_points_x.front());
-                            if(v->second._y > this->_grid_points_y.back())
-                                v->second._y = v->second._y - (this->_grid_points_y.back() - this->_grid_points_y.front());
-                            else if(v->second._y < this->_grid_points_y.front())
-                                v->second._y = v->second._y + (this->_grid_points_y.back() - this->_grid_points_y.front());
-                        }
-                    }
-                    else { // need to turn
+                    if(turn_p < this->_prob_turn) { // no need to turn
                         float first;
-                        if(v->second._direction >> 1 == 1) { // on E-W
+                        if((v->second._direction & 0b10) == 0b10) { // on E-W
                             this->_find_grid_point(v->second._x, x_change, true, &first);
                             v->second._x = first;
                             v->second._direction ^= mc_vehicle::TURN;
@@ -151,10 +147,9 @@ void vehicle_mgr::run() {
                         }
                     }
                 }
-                else {
-                    v->second._x += x_change;
-                    v->second._y += y_change;
-                }
+                v->second._x += x_change;
+                v->second._y += y_change;
+                this->_correct_out_of_boundary(v->second);
             }
         }
     }

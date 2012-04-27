@@ -17,13 +17,13 @@ class mc_vehicle {
         unsigned short _speed;
         short _acceleration;
 
-        static const unsigned int N = 0b00;
-        static const unsigned int E = 0b10;
-        static const unsigned int S = 0b01;
-        static const unsigned int W = 0b11;
-        static const unsigned int U_TURN = 0b01;
-        static const unsigned int TURN = 0b10;
-        unsigned int _direction;
+        static const int N = 0b00;
+        static const int E = 0b10;
+        static const int S = 0b01;
+        static const int W = 0b11;
+        static const int U_TURN = 0b01;
+        static const int TURN = 0b10;
+        int _direction;
 
         static mc_vehicle create_from_memcache(const std::vector<char> & value) {
             mc_vehicle r;
