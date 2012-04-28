@@ -383,6 +383,8 @@ void *sender_hello (void *context){
             struct tuxname_port temp = (*name_port)[*it];
             struct sockaddr_in socktemp = convt2sockaddr(temp);
 
+            S::get()->incHELLO();
+
             if (MPRs.count(*it) > 0){
                 //if this node is a MPR of me, then send m2
                 sendto(sd,tosend2, HelloMsg::HELLOMSG_SIZE,0,(struct sockaddr *) &(socktemp),sizeof(struct sockaddr_in));

@@ -4,7 +4,7 @@
 #include <string>
 #include <queue>
 #include <mutex>
-
+#include <ctime>
 #include "configuration.h"
 #include "message.h"
 #include "cache.h"
@@ -28,7 +28,11 @@ class S {
         short _acceleration;
         neighborTable * ntable;
         MPR_selectors * MPRselectors;
+       //variables to compute throughput
+        unsigned int eeblNum, eeblRebNum, helloNum, beaconNum;
+        std::mutex _mutex_eeblNum, _mutex_eeblRebNum, _mutex_helloNum, _mutex_beaconNum;
 
+        time_t startTime;
         std::mutex _mutex_eebl_sending_queue;
         std::mutex _mutex_gps;
         std::mutex _mutex_speed;
@@ -66,6 +70,16 @@ class S {
         
         neighborTable* get_nbTable();
         MPR_selectors* get_MPRselectors();
+        //methods about throughput
+        void incEEBL();
+        void incEEBLREB();
+        void incHELLO();
+        void incBEACON();
+        unsigned int getEEBL();
+        unsigned int getEEBLREB();
+        unsigned int getHELLO();
+        unsigned int getBEACON();
+        time_t getSTARTTIME() { return this->startTime; }
        
 };
 

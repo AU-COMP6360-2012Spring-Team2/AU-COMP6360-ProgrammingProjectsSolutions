@@ -13,9 +13,11 @@
 #include <stdlib.h>
 #include <errno.h>
 #include <string>
+#include <sstream>
 #include <sys/socket.h>
+#include <unistd.h>
 #include <cstring>
-#include "string.h"
+#include <ctime>
 #include "pg.h"
 #include "S.h"
 #include "physical_world.h"
@@ -108,6 +110,16 @@ int main(int argc, char* argv[]) {
     */
 
 
+    while(true) {
+        std::ofstream ofs;
+        std::stringstream ss;
+        ss<<"/home/cse_h2/szg0031/src/AU-COMP6360-ProgrammingProjectsSolutions/project_2/src/node/log/m"<<nodeid;
+        ofs.open(ss.str());
+        //ofs<<"TIME"<<"\t"<<"NODE#"<<"\t"<<"EEBL"<<"\t"<<"REBR_EEBL"<<"\t"<<"BEACON"<<"\t"<<"HELLO"<<std::endl;
+        ofs<<(time(NULL) - S::get()->getSTARTTIME())<<"\t"<<nodeid<<"\t"<<S::get()->getEEBL()<<"\t"<<S::get()->getEEBLREB()<<"\t"<<S::get()->getBEACON()<<"\t"<<S::get()->getHELLO()<<std::endl;
+        ofs.close();
+        sleep(1);
+    }
 
 
     pthread_join(recver.thread, NULL);

@@ -4,6 +4,7 @@
 user=$('whoami')
 dir=$1
 file=$2
+xfile=$3
 conf_file=$1/$2
 #echo "$dir/conf"
 echo "$conf_file"
@@ -15,7 +16,7 @@ node_size=$(expr $node_size - 1)
 # redirect to different log files
 for n in $(seq 0 $node_size); do
     echo "Launch "${NUM[$n]}" process on "${NODE[$n]}
-    ssh ${NODE[$n]} $dir/main.x $conf_file ${NUM[$n]} > $dir/log/${NUM[$n]}-${NODE[$n]}-log &
+    ssh ${NODE[$n]} $dir/$xfile $conf_file ${NUM[$n]} > $dir/log/${NUM[$n]}-${NODE[$n]}-log &
     sleep 1;
 done
 

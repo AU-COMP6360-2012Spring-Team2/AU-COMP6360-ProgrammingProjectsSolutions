@@ -22,6 +22,11 @@ void S::initialize(std::string * config_file, unsigned int node_number){
     instance->_me = new vehicle(node_number, 0, 2, 1, 1);
     instance->ntable = new neighborTable;
     instance->MPRselectors = new MPR_selectors;
+    instance->eeblNum = 0;
+    instance->eeblRebNum = 0;
+    instance->helloNum = 0;
+    instance->beaconNum = 0;
+    instance->startTime = time(NULL);
 }
 
 S * S::get(){
@@ -133,4 +138,44 @@ neighborTable* S::get_nbTable(){
 
 MPR_selectors* S::get_MPRselectors(){
     return this->MPRselectors;
+}
+
+void S::incEEBL(){
+    std::lock_guard<std::mutex> l(this->_mutex_eeblNum);
+    eeblNum++;
+}
+
+void S::incEEBLREB(){
+    std::lock_guard<std::mutex> l(this->_mutex_eeblRebNum);
+    eeblRebNum++;
+}
+
+void S::incHELLO(){
+    std::lock_guard<std::mutex> l(this->_mutex_helloNum);
+    helloNum++;
+}
+
+void S::incBEACON(){
+    std::lock_guard<std::mutex> l(this->_mutex_helloNum);
+    beaconNum++;
+}
+
+unsigned int S::getEEBL(){
+    std::lock_guard<std::mutex> l(this->_mutex_eeblNum);
+    return eeblNum;
+}
+
+unsigned int S::getEEBLREB(){
+    std::lock_guard<std::mutex> l(this->_mutex_eeblRebNum);
+    return eeblRebNum;
+}
+
+unsigned int S::getHELLO(){
+    std::lock_guard<std::mutex> l(this->_mutex_helloNum);
+    return helloNum;
+}
+
+unsigned int S::getBEACON(){
+    std::lock_guard<std::mutex> l(this->_mutex_helloNum);
+    return beaconNum;
 }
