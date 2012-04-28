@@ -31,7 +31,7 @@ configuration::configuration(string * filename){
         istream_iterator<string> eos;
         iit++; //omit the first word "Node"
         iit++; //omit node id
-        if(i<30){
+      //  if(i<30){
             tuxnode.tuxname = *iit;
             iit++;
             tuxnode.port = atoi((*iit).c_str());
@@ -55,7 +55,7 @@ configuration::configuration(string * filename){
             gps_coord.gps_y = (float) atof((*iit).c_str());
             gps_coord.gps_z = 0; 
             gps_coordinate->insert(pair<usint, struct gps>(i+1,gps_coord));
-        }
+        //}
         i++;
     }
     in.close();
